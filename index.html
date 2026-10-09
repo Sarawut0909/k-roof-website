@@ -949,7 +949,7 @@ async function uploadFiles(type,id,files){
     if(up.error)return {ok:false,error:up.error.message};
     const table=type==="product"?"product_images":"service_images",field=type==="product"?"product_id":"service_id";
     const imageUrl=sb.storage.from("kroof").getPublicUrl(path).data.publicUrl;
-    const ins=await sb.from(table).insert({[field]:id,image_url:imageUrl,sort_order:Date.now()});
+    const ins=await sb.from(table).insert({[field]:id,image_url:imageUrl,sort_order:1});
     if(ins.error){await sb.storage.from("kroof").remove([path]);return {ok:false,error:ins.error.message};}
   }
   return {ok:true};
