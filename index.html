@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>K-Roof | หลังคาเครูฟ</title>
+<style>
+:root{--navy:#082b55;--blue:#0b4d8d;--gold:#d6a83a;--bg:#f5f7fa;--text:#17202a}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,"Noto Sans Thai",sans-serif;background:var(--bg);color:var(--text)}
+header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #ddd}
+.nav{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:15px}
+.logo{font-weight:900;font-size:25px;color:var(--navy)} .logo small{display:block;font-size:12px;font-weight:600}
+nav{display:flex;gap:8px;flex-wrap:wrap} nav button{border:0;background:#eef3f8;padding:10px 14px;border-radius:20px;font-weight:700;cursor:pointer}
+nav button:hover{background:#dce9f5}
+.hero{background:linear-gradient(135deg,#06284d,#0b5795);color:#fff;padding:65px 18px}
+.hero-in{max-width:1200px;margin:auto;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+.hero h1{font-size:clamp(38px,6vw,70px);margin:0 0 12px}.hero p{font-size:20px;line-height:1.6}
+.cta{display:flex;gap:10px;flex-wrap:wrap}.btn{display:inline-block;padding:13px 20px;border-radius:12px;text-decoration:none;font-weight:800;border:0;cursor:pointer}.primary{background:#ffd43b;color:#17202a}.light{background:#fff;color:var(--navy)}
+.hero-card{background:rgba(255,255,255,.12);padding:25px;border-radius:22px;border:1px solid rgba(255,255,255,.2)}
+section{max-width:1200px;margin:auto;padding:35px 18px} h2{font-size:32px;margin:0 0 24px;color:var(--navy)}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}.tab{padding:10px 16px;border-radius:999px;border:1px solid #ccd7e3;background:#fff;cursor:pointer;font-weight:700}.tab.active{background:var(--navy);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 5px 20px rgba(0,0,0,.07);border:1px solid #e1e7ee}
+.pic{aspect-ratio:4/3;background:#e9eef4;display:flex;align-items:center;justify-content:center;overflow:hidden}.pic img{width:100%;height:100%;object-fit:cover}.placeholder{color:#718096;text-align:center;padding:20px}
+.card-body{padding:17px}.card h3{margin:0 0 7px;font-size:20px}.tag{display:inline-block;background:#e8f1fb;color:#174f82;padding:5px 9px;border-radius:8px;font-size:12px;font-weight:700}
+.card .actions{display:flex;gap:8px;margin-top:14px}.small{padding:9px 12px;border-radius:9px;font-size:13px}
+.service{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.service .card{padding-bottom:10px}
+.contact{background:var(--navy);color:#fff}.contact h2{color:#fff}.contact-box{display:grid;grid-template-columns:1fr 1fr;gap:20px}.contact a{color:#fff}.contact-item{background:rgba(255,255,255,.08);padding:20px;border-radius:15px}
+footer{background:#061d38;color:#fff;text-align:center;padding:22px}
+#admin{display:none;background:#fff0d8;border-top:1px solid #e7c98d}.admin-inner{max-width:1200px;margin:auto;padding:25px 18px}.admin-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-box{background:#fff;padding:16px;border-radius:14px;border:1px solid #e3d4b5}.admin-box input,.admin-box select,.admin-box textarea{width:100%;padding:10px;margin:7px 0;border:1px solid #ccd3db;border-radius:8px}.note{font-size:13px;color:#665a43;line-height:1.5}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.service{grid-template-columns:repeat(2,1fr)}.hero-in{grid-template-columns:1fr}.contact-box{grid-template-columns:1fr}}
+@media(max-width:560px){.grid,.service{grid-template-columns:1fr}.nav{align-items:flex-start;flex-direction:column}.hero{padding:45px 18px}.admin-row{grid-template-columns:1fr}}
+
+.catalog-head{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:24px;padding:24px 26px;background:#fff;border-radius:22px;border:1px solid #e3e9ef;box-shadow:0 7px 25px rgba(8,43,85,.06)}
+.catalog-head h2{margin:3px 0 6px;font-size:34px}.catalog-head p{margin:0;color:#6b7785}
+.eyebrow{font-size:12px;font-weight:900;letter-spacing:2px;color:#b08421}
+.quickbar{max-width:1200px;margin:18px auto 0;padding:11px 18px;background:#082b55;color:#fff;border-radius:12px;display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.quickbar a{color:#fff;background:#19b95b;padding:7px 12px;border-radius:8px;text-decoration:none;font-weight:800}
+@media(max-width:650px){.catalog-head{display:block}.quickbar{margin:10px 12px 0;display:block}.quickbar a{display:inline-block;margin-top:7px}}
+
+
+header{
+  background:#0a0a0a !important;
+  border-bottom:3px solid #d6a83a !important;
+  box-shadow:0 3px 16px rgba(0,0,0,.25);
+}
+.nav{color:#fff}
+.logo{color:#fff}
+.logo small{color:#d6d6d6}
+nav button{
+  background:#1b1b1b;
+  color:#fff;
+  border:1px solid #333;
+}
+nav button:hover{
+  background:#d6a83a;
+  color:#111;
+}
+
+
+/* K-Roof: header only */
+header{
+  background:#000 !important;
+  border-bottom:2px solid #000 !important;
+  color:#fff !important;
+}
+header .nav{color:#fff !important}
+header .logo{color:#fff !important}
+header .logo small{color:#fff !important}
+header nav button{
+  background:#000 !important;
+  color:#fff !important;
+  border:1px solid #333 !important;
+}
+header nav button:hover{
+  background:#222 !important;
+  color:#fff !important;
+}
+
+
+.gallery-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:100;align-items:center;justify-content:center;padding:18px}
+.gallery-modal.show{display:flex}
+.gallery-box{width:min(1000px,96vw);max-height:94vh;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);position:relative}
+.gallery-top{padding:15px 20px;background:#082b55;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.gallery-top h3{margin:0;font-size:20px}
+.gallery-close{border:0;background:#fff;color:#082b55;border-radius:50%;width:36px;height:36px;font-size:22px;cursor:pointer}
+.gallery-main{background:#101820;min-height:420px;display:flex;align-items:center;justify-content:center;position:relative}
+.gallery-main img{max-width:100%;max-height:62vh;object-fit:contain;display:block}
+.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);border:0;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.9);color:#082b55;font-size:26px;cursor:pointer}
+.gallery-prev{left:14px}.gallery-next{right:14px}
+.gallery-thumbs{display:flex;gap:10px;overflow-x:auto;padding:13px;background:#f3f6f9}
+.gallery-thumb{width:78px;height:58px;flex:0 0 auto;border:2px solid transparent;border-radius:8px;overflow:hidden;background:#ddd;cursor:pointer}
+.gallery-thumb.active{border-color:#d6a83a}.gallery-thumb img{width:100%;height:100%;object-fit:cover}
+.gallery-empty{text-align:center;color:#64748b;padding:55px 20px;font-weight:700}
+.card .pic{cursor:pointer}
+.service .pic{cursor:pointer}
+
+
+.folder-box{max-width:1100px;width:96vw}
+.folder-label{font-size:10px;letter-spacing:2px;color:#d6a83a;font-weight:900;margin-bottom:2px}
+.folder-content{background:#f4f6f8;padding:18px;max-height:78vh;overflow:auto}
+.folder-path{background:#fff;border:1px solid #dce3e9;border-radius:10px;padding:10px 14px;color:#40566b;font-weight:800;margin-bottom:14px}
+.folder-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.folder-item{background:#fff;border:1px solid #dce3e9;border-radius:12px;padding:7px;cursor:pointer;transition:.18s;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+.folder-item:hover{transform:translateY(-3px);border-color:#d6a83a;box-shadow:0 8px 20px rgba(0,0,0,.12)}
+.folder-item img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;display:block}
+.folder-item .filename{font-size:12px;color:#526477;padding:8px 3px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.image-lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:200;align-items:center;justify-content:center;padding:55px 70px}
+.image-lightbox.show{display:flex}
+.image-lightbox>img{max-width:92vw;max-height:82vh;object-fit:contain;border-radius:6px}
+.lightbox-close{position:absolute;right:18px;top:15px;width:42px;height:42px;border:0;border-radius:50%;background:#fff;color:#111;font-size:28px;cursor:pointer}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:50px;height:50px;border:0;border-radius:50%;background:rgba(255,255,255,.9);color:#082b55;font-size:34px;cursor:pointer}
+.lightbox-prev{left:18px}.lightbox-next{right:18px}
+.lightbox-caption{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);color:#fff;padding:7px 14px;border-radius:20px;font-size:13px;max-width:80%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:800px){.folder-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.folder-grid{grid-template-columns:repeat(2,1fr)}.image-lightbox{padding:45px 48px}.lightbox-nav{width:40px;height:40px;font-size:27px}.lightbox-prev{left:7px}.lightbox-next{right:7px}}
+
+
+.product-page{
+  position:fixed;inset:0;background:#f4f6f8;z-index:150;
+  display:none;overflow:auto;
+}
+.product-page.show{display:block}
+.product-page-head{
+  position:sticky;top:0;z-index:3;background:#000;color:#fff;
+  display:flex;align-items:center;gap:14px;padding:14px 22px;
+  box-shadow:0 2px 12px rgba(0,0,0,.2)
+}
+.product-back{
+  border:1px solid #555;background:#111;color:#fff;border-radius:9px;
+  padding:9px 15px;font-weight:800;cursor:pointer
+}
+.product-page-title{font-size:22px;font-weight:900}
+.product-page-body{max-width:1200px;margin:auto;padding:28px 20px 60px}
+.product-folder{
+  background:#fff;border:1px solid #dde3e8;border-radius:14px;
+  padding:14px 18px;margin-bottom:20px;font-weight:800;color:#45596b
+}
+.product-gallery{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px
+}
+.product-photo{
+  background:#fff;border:1px solid #dce3e9;border-radius:14px;padding:8px;
+  cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.06);transition:.18s
+}
+.product-photo:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(0,0,0,.13);border-color:#d6a83a}
+.product-photo img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:9px;display:block}
+.product-photo-name{padding:9px 4px 3px;font-size:13px;color:#526477;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.product-no-image{
+  grid-column:1/-1;background:#fff;border:2px dashed #ccd5dd;border-radius:14px;
+  padding:55px 20px;text-align:center;color:#718092
+}
+@media(max-width:900px){.product-gallery{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.product-gallery{grid-template-columns:repeat(2,1fr)}.product-page-title{font-size:18px}}
+
+
+.photo-spec-title{font-size:12px;font-weight:900;color:#111;margin:8px 0 3px}
+.photo-spec{margin-top:8px;border-top:1px solid #e5e9ed;padding-top:7px}
+.spec-row{display:flex;justify-content:space-between;gap:8px;padding:3px 1px;font-size:12px;line-height:1.35}
+.spec-key{font-weight:900;color:#263b4f;white-space:nowrap}
+.spec-value{text-align:right;color:#647487}
+
+
+.product-detail-page{
+  position:fixed;inset:0;background:#f4f6f8;z-index:180;
+  display:none;overflow:auto
+}
+.product-detail-page.show{display:block}
+.detail-head{
+  position:sticky;top:0;z-index:5;background:#000;color:#fff;
+  display:flex;align-items:center;gap:14px;padding:14px 22px;
+  box-shadow:0 2px 12px rgba(0,0,0,.2)
+}
+.detail-back{
+  background:#111;color:#fff;border:1px solid #555;border-radius:9px;
+  padding:9px 15px;font-weight:900;cursor:pointer
+}
+.detail-title{font-size:21px;font-weight:900}
+.detail-wrap{max-width:1100px;margin:auto;padding:28px 20px 60px}
+.detail-info{
+  background:#fff;border-radius:16px;padding:22px;margin-bottom:24px;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);border:1px solid #e0e5e9
+}
+.detail-info h2{margin:0 0 14px;font-size:22px}
+.detail-spec-row{
+  display:flex;gap:18px;border-bottom:1px solid #edf0f2;padding:9px 0;
+}
+.detail-spec-key{font-weight:900;min-width:120px;color:#263b4f}
+.detail-spec-value{color:#566a7c}
+.detail-images-title{font-size:20px;font-weight:900;margin:22px 0 12px}
+.detail-images{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px
+}
+.detail-image{
+  background:#fff;border-radius:14px;padding:8px;border:1px solid #dce3e9;
+  cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.06)
+}
+.detail-image img{
+  width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:9px;display:block
+}
+.detail-empty{
+  background:#fff;border:2px dashed #ccd5dd;border-radius:14px;
+  padding:50px 20px;text-align:center;color:#718092
+}
+@media(max-width:700px){.detail-images{grid-template-columns:repeat(2,1fr)}}
+
+
+.ask-price{
+  display:inline-block;
+  margin-top:8px;
+  color:#0758d8;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+
+.product-card-click{cursor:pointer}
+.product-card-click:hover{transform:translateY(-3px)}
+
+
+.ask-price{
+  display:inline-flex !important;
+  align-items:center;
+  justify-content:center;
+  margin-top:8px !important;
+  padding:12px 20px !important;
+  min-height:44px;
+  box-sizing:border-box;
+  background:#ffd33d !important;
+  color:#111 !important;
+  border:0 !important;
+  border-radius:13px !important;
+  font-size:17px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  text-decoration:none !important;
+  cursor:pointer;
+  transition:transform .15s ease, background .15s ease;
+}
+.ask-price:hover{
+  background:#ffcc22 !important;
+  transform:translateY(-1px);
+}
+
+
+.main-layout{
+  display:grid;
+  grid-template-columns:230px minmax(0,1fr);
+  gap:28px;
+  max-width:1500px;
+  margin:0 auto;
+  padding:28px 34px 60px;
+}
+.left-menu{
+  position:sticky;
+  top:105px;
+  align-self:start;
+  background:#fff;
+  border:1px solid #dfe5eb;
+  border-radius:16px;
+  padding:14px;
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+.left-menu-title{
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  color:#9a6d00;
+  padding:8px 12px 12px;
+  border-bottom:1px solid #e9edf1;
+}
+.left-menu button{
+  width:100%;
+  display:block;
+  text-align:left;
+  background:#fff;
+  border:0;
+  border-radius:10px;
+  padding:13px 14px;
+  margin-top:6px;
+  color:#122c49;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+}
+.left-menu button:hover,
+.left-menu button.active{
+  background:#ffd33d;
+  color:#111;
+}
+.main-content{min-width:0}
+@media(max-width:850px){
+  .main-layout{grid-template-columns:1fr;padding:18px}
+  .left-menu{position:static;display:flex;gap:7px;overflow-x:auto;padding:10px}
+  .left-menu-title{display:none}
+  .left-menu button{white-space:nowrap;width:auto;margin:0}
+}
+
+
+.left-menu{
+  background:#0b3568 !important;
+  border:1px solid #0b3568 !important;
+  color:#fff !important;
+  box-shadow:0 5px 18px rgba(0,0,0,.12) !important;
+}
+.left-menu-title{
+  color:#fff !important;
+  border-bottom:1px solid rgba(255,255,255,.28) !important;
+}
+.left-menu button{
+  background:transparent !important;
+  color:#fff !important;
+}
+.left-menu button:hover,
+.left-menu button.active{
+  background:#ffd33d !important;
+  color:#111 !important;
+}
+
+
+.card-actions{
+  display:flex;
+  gap:9px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+.card-actions button{
+  border:0;
+  border-radius:13px;
+  padding:11px 16px;
+  min-height:44px;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.15s ease;
+}
+.price-btn{
+  background:#ffd33d;
+  color:#111;
+}
+.price-btn:hover{
+  background:#ffcc22;
+  transform:translateY(-1px);
+}
+.detail-btn{
+  background:#0b3568;
+  color:#fff;
+}
+.detail-btn:hover{
+  background:#082b55;
+  transform:translateY(-1px);
+}
+@media(max-width:520px){
+  .card-actions{flex-direction:column}
+  .card-actions button{width:100%}
+}
+
+
+.card-actions{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  gap:7px !important;
+  margin-top:10px !important;
+}
+.card-actions button{
+  flex:0 0 auto !important;
+  width:auto !important;
+  min-height:36px !important;
+  padding:8px 13px !important;
+  border-radius:9px !important;
+  font-size:14px !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+}
+
+
+.card-actions{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  flex-wrap:nowrap !important;
+  gap:6px !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  overflow:visible !important;
+}
+.card-actions button{
+  flex:1 1 0 !important;
+  width:auto !important;
+  min-width:0 !important;
+  max-width:50% !important;
+  height:34px !important;
+  min-height:34px !important;
+  padding:6px 8px !important;
+  border-radius:8px !important;
+  font-size:13px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  box-sizing:border-box !important;
+}
+.price-btn{background:#ffd33d !important;color:#111 !important}
+.detail-btn{background:#0b3568 !important;color:#fff !important}
+
+
+header nav button{
+  cursor:pointer !important;
+  pointer-events:auto !important;
+  position:relative !important;
+  z-index:30 !important;
+}
+
+</style>
+
+<style>
+#cloudAdminPanel{display:none;background:#fff;border:1px solid #d9e2ea;border-radius:16px;padding:20px;margin-top:18px}
+#cloudLogin{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center}
+#cloudLogin.show{display:flex}.cloud-box{width:min(420px,92vw);background:#fff;border-radius:16px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.cloud-box h3{margin:0 0 14px}.cloud-box input,.cloud-box select,.cloud-box textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #ccd6df;border-radius:8px;margin:5px 0 10px;font:inherit}.cloud-actions{display:flex;gap:8px;flex-wrap:wrap}.cloud-btn{border:0;border-radius:9px;padding:10px 14px;font-weight:900;cursor:pointer}.cloud-primary{background:#ffd33d;color:#111}.cloud-blue{background:#0b3568;color:#fff}.cloud-muted{background:#e9eef3}.cloud-note{font-size:13px;color:#617487;margin:8px 0}.cloud-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cloud-full{grid-column:1/-1}.cloud-list{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.cloud-list img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}.cloud-img{position:relative}.cloud-img button{position:absolute;right:4px;top:4px;border:0;border-radius:7px;background:#fff;color:#a00;font-weight:900;cursor:pointer}@media(max-width:700px){.cloud-grid,.cloud-list{grid-template-columns:1fr 1fr}.cloud-full{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+<div class="logo">K-Roof<small>หลังคาเครูฟ • จำหน่ายและรับติดตั้ง</small></div>
+<nav>
+<button onclick="go('home')">หน้าแรก</button><button onclick="go('products')">สินค้า</button><button onclick="go('services')">บริการ</button><button onclick="go('contact')">ติดต่อ</button><button onclick="toggleAdmin()">จัดการรูป</button>
+</nav></div></header>
+
+<main id="home">
+<div class="quickbar">
+  <div>📞 <b>092-796-8777</b> &nbsp; | &nbsp; <b>092-872-8174</b></div>
+  <a href="https://lin.ee/ONjTmCS" target="_blank">LINE: ติดต่อ K-Roof</a>
+</div>
+<div class="main-layout">
+
+<aside class="left-menu">
+  <div class="left-menu-title">K-ROOF MENU</div>
+  <button class="active" data-maincat="products">ผลิตภัณฑ์</button>
+  <button data-maincat="carport">โรงจอดรถ</button>
+  <button data-maincat="awning">กันสาด</button>
+  <button data-maincat="structure">โครงหลังคา</button>
+</aside>
+
+<main class="main-content">
+<section id="products">
+<div class="catalog-head">
+  <div>
+    <div class="eyebrow">K-ROOF CATALOG</div>
+    <h2>เลือกแผ่นหลังคาที่ต้องการ</h2>
+    <p>รวมสินค้าแผ่นหลังคาหลายประเภท พร้อมดูรายละเอียดและเพิ่มรูปสินค้าได้ภายหลัง</p>
+  </div>
+</div>
+<div class="grid" id="productGrid"></div></section>
+</main>
+</div>
+
+<section id="services"><h2>บริการของ K-Roof</h2><p style="color:#64748b;margin-top:-12px;margin-bottom:24px">เลือกรูปแบบงานที่สนใจ แล้วกดดูรูปผลงานได้หลายรูป</p><div class="service" id="serviceGrid">
+<div class="card" onclick="openGallery('s:car1','โรงจอดรถ 1 คัน')"><div class="pic" id="spic-car1"><div class="placeholder">เพิ่มรูปโรงจอดรถ 1 คัน<br><b>คลิกเพื่อดูหลายรูป</b></div></div><div class="card-body"><h3>โรงจอดรถ 1 คัน</h3><span class="tag">มีแบบให้เลือก</span></div></div>
+<div class="card" onclick="openGallery('s:car2','โรงจอดรถ 2 คัน')"><div class="pic" id="spic-car2"><div class="placeholder">เพิ่มรูปโรงจอดรถ 2 คัน<br><b>คลิกเพื่อดูหลายรูป</b></div></div><div class="card-body"><h3>โรงจอดรถ 2 คัน</h3><span class="tag">มีแบบให้เลือก</span></div></div>
+<div class="card" onclick="openGallery('s:car3','โรงจอดรถ 3 คัน')"><div class="pic" id="spic-car3"><div class="placeholder">เพิ่มรูปโรงจอดรถ 3 คัน<br><b>คลิกเพื่อดูหลายรูป</b></div></div><div class="card-body"><h3>โรงจอดรถ 3 คัน</h3><span class="tag">มีแบบให้เลือก</span></div></div>
+<div class="card" onclick="openGallery('s:car4','โรงจอดรถ 4 คัน + รูฟ')"><div class="pic" id="spic-car4"><div class="placeholder">เพิ่มรูปโรงจอดรถ 4 คัน / รูฟ<br><b>คลิกเพื่อดูหลายรูป</b></div></div><div class="card-body"><h3>โรงจอดรถ 4 คัน + รูฟ</h3><span class="tag">มีแบบให้เลือก</span></div></div>
+<div class="card" onclick="openGallery('s:awning','กันสาด')"><div class="pic" id="spic-awning"><div class="placeholder">เพิ่มรูปกันสาด<br><b>คลิกเพื่อดูหลายรูป</b></div></div><div class="card-body"><h3>กันสาด</h3><span class="tag">ดูผลงานจริง</span></div></div>
+<div class="card" onclick="openGallery('s:roof','ทำหลังคา')"><div class="pic" id="spic-roof"><div class="placeholder">เพิ่มรูปงานหลังคา<br><b>คลิกเพื่อดูหลายรูป</b></div></div><div class="card-body"><h3>ทำหลังคา</h3><span class="tag">รับติดตั้ง</span></div></div>
+</div></section>
+
+<section class="contact" id="contact"><h2>ติดต่อ K-Roof</h2><div class="contact-box">
+<div class="contact-item"><h3>ข้อมูลสินค้า</h3><p><a href="tel:0927968777">092-796-8777 (เค)</a><br><a href="tel:0928728174">092-872-8174 (แก้ว)</a></p></div>
+<div class="contact-item"><h3>LINE</h3><p><a href="https://lin.ee/ONjTmCS" target="_blank">แชทกับ K-Roof ทาง LINE</a></p></div>
+</div></section>
+</main>
+
+<section id="admin">
+<div class="admin-inner"><h2>จัดการรูปสินค้า / รูปผลงาน</h2>
+<p class="note">เว็บนี้ทำงานออฟไลน์ได้ รูปที่เลือกจะถูกเก็บไว้ในเบราว์เซอร์เครื่องนี้ด้วย IndexedDB จึงสามารถเพิ่ม/เปลี่ยนรูปภายหลังโดยไม่ต้องแก้ HTML ใหม่ หากล้างข้อมูลเว็บไซต์ของเบราว์เซอร์ รูปที่เก็บไว้ก็อาจหายได้</p>
+<div class="admin-row">
+<div class="admin-box"><h3>เพิ่มรูปให้สินค้า</h3><select id="productSelect"></select><input id="productImage" type="file" accept="image/*" multiple><button class="btn primary" onclick="saveProductImages()">บันทึกรูปสินค้า</button></div>
+<div class="admin-box"><h3>เพิ่มรูปให้บริการ</h3><select id="serviceSelect"><option value="car1">โรงจอดรถ 1 คัน</option><option value="car2">โรงจอดรถ 2 คัน</option><option value="car3">โรงจอดรถ 3 คัน</option><option value="car4">โรงจอดรถ 4 คัน + รูฟ</option><option value="awning">กันสาด</option><option value="roof">ทำหลังคา</option></select><input id="serviceImage" type="file" accept="image/*" multiple><button class="btn primary" onclick="saveServiceImages()">บันทึกรูปบริการ</button></div>
+</div>
+<p id="adminMsg" class="note"></p>
+<div id="cloudAdminPanel">
+<h3>จัดการข้อมูลออนไลน์ K-Roof</h3>
+<div class="cloud-note">ข้อมูลที่บันทึกตรงนี้จะเป็นข้อมูลกลาง ลูกค้าทุกคนเห็นเหมือนกัน</div>
+<div class="cloud-grid">
+<div><label>สินค้า</label><select id="cloudProduct"></select></div>
+<div><label>ชื่อรุ่น</label><input id="cloudName"></div>
+<div><label>ความกว้าง</label><input id="cloudWidth"></div>
+<div><label>ความหนา</label><input id="cloudThickness"></div>
+<div><label>ความยาว</label><input id="cloudLength"></div>
+<div><label>สี</label><input id="cloudColors"></div>
+<div><label>วัสดุ</label><input id="cloudMaterial"></div>
+<div><label>ระยะแป</label><input id="cloudPurlin"></div>
+<div><label>ความลาดชัน</label><input id="cloudSlope"></div>
+<div class="cloud-full"><label>รายละเอียดเพิ่มเติม</label><textarea id="cloudMore"></textarea></div>
+<div class="cloud-full"><label>เพิ่มรูปสินค้า (เลือกหลายรูปได้)</label><input id="cloudProductFiles" type="file" accept="image/*" multiple></div>
+</div>
+<div class="cloud-actions" style="margin-top:12px"><button class="cloud-btn cloud-primary" id="cloudSaveProduct">บันทึกสินค้า</button><button class="cloud-btn cloud-muted" id="cloudLogout">ออกจากระบบ</button></div>
+<div id="cloudProductImages" class="cloud-list"></div>
+<hr style="margin:20px 0;border:0;border-top:1px solid #e3e8ed">
+<h3>รูปบริการ</h3><div class="cloud-grid"><div><label>บริการ</label><select id="cloudService"></select></div><div><label>เพิ่มรูปบริการ</label><input id="cloudServiceFiles" type="file" accept="image/*" multiple></div></div>
+<div class="cloud-actions" style="margin-top:12px"><button class="cloud-btn cloud-blue" id="cloudSaveService">บันทึกรูปบริการ</button></div><div id="cloudServiceImages" class="cloud-list"></div>
+<div id="cloudMsg" class="cloud-note"></div>
+</div>
+
+</div></section>
+
+
+
+<div class="product-page" id="productPage">
+  <div class="product-page-head">
+    <button class="product-back" onclick="closeProductPage()">← กลับ</button>
+    <div class="product-page-title" id="productPageTitle">สินค้า</div>
+  </div>
+  <div class="product-page-body">
+    <div class="product-folder">📁 <span id="productFolderText">รายละเอียดสินค้า</span></div>
+    <div class="product-gallery" id="productPageGallery"></div>
+  </div>
+</div>
+
+<div class="gallery-modal" id="galleryModal" onclick="if(event.target===this)closeGallery()">
+  <div class="gallery-box folder-box">
+    <div class="gallery-top">
+      <div>
+        <div class="folder-label">K-ROOF GALLERY</div>
+        <h3 id="galleryTitle">รูปภาพ</h3>
+      </div>
+      <button class="gallery-close" onclick="closeGallery()">×</button>
+    </div>
+    <div class="folder-content">
+      <div class="folder-path">📁 <span id="galleryFolderName">โฟลเดอร์รูปภาพ</span></div>
+      <div class="folder-grid" id="galleryThumbs"></div>
+      <div class="gallery-empty" id="galleryEmpty" style="display:none">
+        ยังไม่มีรูปในโฟลเดอร์นี้<br>
+        สามารถเพิ่มรูปได้จากเมนู “จัดการรูป”
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="product-detail-page" id="productDetailPage">
+  <div class="detail-head">
+    <button class="detail-back" onclick="closeProductDetail()">← กลับ</button>
+    <div class="detail-title" id="detailTitle">รายละเอียดสินค้า</div>
+  </div>
+  <div class="detail-wrap">
+    <div class="detail-info">
+      <h2>รายละเอียดของแผ่น</h2>
+      <div id="detailSpecs"></div>
+    </div>
+    <div class="detail-images-title">รูปสินค้าเพิ่มเติม</div>
+    <div class="detail-images" id="detailImages"></div>
+  </div>
+</div>
+
+<div class="image-lightbox" id="imageLightbox" onclick="if(event.target===this)closeImageLightbox()">
+  <button class="lightbox-close" onclick="closeImageLightbox()">×</button>
+  <button class="lightbox-nav lightbox-prev" onclick="changeGallery(-1)">‹</button>
+  <img id="lightboxImage" src="" alt="">
+  <button class="lightbox-nav lightbox-next" onclick="changeGallery(1)">›</button>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+<footer>K-Roof หลังคาเครูฟ • จำหน่ายแผ่นหลังคาและรับติดตั้ง</footer>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+(function(){
+"use strict";
+
+const products = [
+ ["vinyl","VG Snow Roof","ไวนิล • VG"],
+ ["vinyl","VG Glacia","ไวนิล • VG"],
+ ["vinyl","VG Winter Roof","ไวนิล • VG"],
+ ["vinyl","VG Winter Plus","ไวนิล • VG"],
+ ["vinyl","RoofyRoof","ไวนิล"],
+ ["vinyl","ภูเขา PR4","ไวนิล • ภูเขา"],
+ ["vinyl","ภูเขา PR5","ไวนิล • ภูเขา"],
+ ["vinyl","ภูเขา PR8","ไวนิล • ภูเขา"],
+ ["fiberglass","JROOF","ไฟเบอร์กลาส"],
+ ["fiberglass","Mini Gold","ไฟเบอร์กลาส"],
+ ["fiberglass","D-Line","ไฟเบอร์กลาส"],
+ ["poly","โพลีคาร์บอเนต","โพลีคาร์บอเนต"]
+];
+
+const specs = {
+ "VG Snow Roof":{
+   "วัสดุ":"High Performance iR-uPVC Premium Grade",
+   "ความกว้าง":"ประมาณ 26.2 ซม.",
+   "ความยาว":"3 / 3.5 / 4 / 4.5 / 5 / 5.5 / 6 / 6.5 ม.",
+   "ความหนา":"ประมาณ 6 มม.",
+   "สี":"สีขาว"
+ },
+ "VG Glacia":{
+   "ความกว้าง":"33.4 ซม.",
+   "ความหนา":"3 ซม. (หรือ 9 มม. ขึ้นอยู่กับการวัดโครงสร้าง)",
+   "ความยาว":"3–6.5 ม. หรือสั่งยาว 7 ม.ขึ้นไป"
+ },
+ "VG Winter Roof":{"ความกว้าง":"ยังไม่ได้ระบุ","ความยาว":"ยังไม่ได้ระบุ","สี":"ยังไม่ได้ระบุ"},
+ "VG Winter Plus":{"ความกว้าง":"ยังไม่ได้ระบุ","ความยาว":"ยังไม่ได้ระบุ","สี":"ยังไม่ได้ระบุ"},
+ "RoofyRoof":{"ความกว้าง":"25 ซม.","ความยาว":"4 / 5 / 6 ม.","สี":"ยังไม่ได้ระบุ"},
+ "ภูเขา PR4":{"ความกว้าง":"ยังไม่ได้ระบุ","ความยาว":"ยังไม่ได้ระบุ","สี":"ยังไม่ได้ระบุ"},
+ "ภูเขา PR5":{"ความกว้าง":"ยังไม่ได้ระบุ","ความยาว":"ยังไม่ได้ระบุ","สี":"ยังไม่ได้ระบุ"},
+ "ภูเขา PR8":{"ความกว้าง":"ยังไม่ได้ระบุ","ความยาว":"ยังไม่ได้ระบุ","สี":"ยังไม่ได้ระบุ"},
+ "JROOF":{"ความกว้าง":"ยังไม่ได้ระบุ","ความยาว":"ยังไม่ได้ระบุ","สี":"ยังไม่ได้ระบุ"},
+ "Mini Gold":{
+   "ความกว้าง":"105 ซม.","ความยาว":"3 / 4 / 5 / 6 / 9 / 12 ม.",
+   "ความสูงลอน":"11 มม.","ความลาดชันขั้นต่ำ":"5 องศา",
+   "ระยะแป":"ไม่เกิน 100 ซม.","ป้องกัน UV":"UVIC / UVAS บล็อก UV ได้สูงสุด 99%"
+ },
+ "D-Line":{"ความกว้าง":"ยังไม่ได้ระบุ","ความยาว":"ยังไม่ได้ระบุ","สี":"ยังไม่ได้ระบุ"},
+ "โพลีคาร์บอเนต":{"ความกว้าง":"ยังไม่ได้ระบุ","ความยาว":"ยังไม่ได้ระบุ","สี":"ยังไม่ได้ระบุ"}
+};
+
+const serviceNames = ["โรงจอดรถ 1 คัน","โรงจอดรถ 2 คัน","โรงจอดรถ 3 คัน","โรงจอดรถ 4 คัน / รูฟ","กันสาด","ทำหลังคา"];
+
+let dbPromise;
+function db(){
+  if(dbPromise) return dbPromise;
+  dbPromise = new Promise((resolve,reject)=>{
+    const req=indexedDB.open("kroof_offline",1);
+    req.onupgradeneeded=()=>{ if(!req.result.objectStoreNames.contains("images")) req.result.createObjectStore("images"); };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+  return dbPromise;
+}
+async function getImages(key){
+  try{
+    const d=await db();
+    return await new Promise((resolve,reject)=>{
+      const r=d.transaction("images","readonly").objectStore("images").get(key);
+      r.onsuccess=()=>resolve(r.result||[]);
+      r.onerror=()=>reject(r.error);
+    });
+  }catch(e){ return []; }
+}
+async function saveImages(key,arr){
+  const d=await db();
+  return new Promise((resolve,reject)=>{
+    const r=d.transaction("images","readwrite").objectStore("images").put(arr,key);
+    r.onsuccess=resolve; r.onerror=()=>reject(r.error);
+  });
+}
+
+function findProductGrid(){
+  return document.getElementById("productGrid");
+}
+
+async function renderProducts(){
+  const grid=findProductGrid();
+  if(!grid) return;
+  grid.innerHTML="";
+  for(let i=0;i<products.length;i++){
+    const p=products[i], imgs=await getImages("p"+i), img=imgs[0];
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML =
+      '<div class="pic product-card-click">'+
+      (img ? '<img src="'+img+'" alt="'+p[1]+'">' : '<div class="placeholder">ยังไม่มีรูป<br><b>เพิ่มได้ภายหลัง</b></div>')+
+      '</div>'+
+      '<div class="card-body">'+
+      '<span class="tag">'+p[2]+'</span>'+
+      '<h3>'+p[1]+'</h3>'+
+      '<div class="card-actions">'+
+      '<button class="price-btn" type="button">สอบถามราคา</button>'+
+      '<button class="detail-btn" type="button">รายละเอียด</button>'+
+      '</div>'+
+      '</div>';
+    card.querySelector(".pic").addEventListener("click",()=>openProductDetail(i));
+    card.querySelector(".detail-btn").addEventListener("click",()=>openProductDetail(i));
+    card.querySelector(".price-btn").addEventListener("click",(e)=>{
+      e.stopPropagation();
+      alert("กรุณาติดต่อ K-Roof เพื่อสอบถามราคา");
+    });
+    grid.appendChild(card);
+  }
+}
+
+async function openProductDetail(index){
+  const p=products[index];
+  const page=document.getElementById("productDetailPage");
+  if(!page) return;
+  document.getElementById("detailTitle").textContent=p[1];
+  const spec=specs[p[1]]||{};
+  document.getElementById("detailSpecs").innerHTML=Object.entries(spec).map(([k,v])=>
+    '<div class="detail-spec-row"><span class="detail-spec-key">'+k+
+    '</span><span class="detail-spec-value">'+v+'</span></div>').join("");
+  const imgs=await getImages("p"+index);
+  const box=document.getElementById("detailImages");
+  if(!imgs.length){
+    box.innerHTML='<div class="detail-empty" style="grid-column:1/-1">ยังไม่มีรูปสินค้า</div>';
+  }else{
+    box.innerHTML="";
+    imgs.forEach((src,i)=>{
+      const d=document.createElement("div");
+      d.className="detail-image";
+      d.innerHTML='<img src="'+src+'" alt="'+p[1]+' รูปที่ '+(i+1)+'">';
+      d.addEventListener("click",()=>openLightbox(imgs,i,p[1]));
+      box.appendChild(d);
+    });
+  }
+  page.classList.add("show");
+  window.scrollTo(0,0);
+}
+
+function closeProductDetail(){
+  const p=document.getElementById("productDetailPage");
+  if(p) p.classList.remove("show");
+}
+
+let lightImgs=[], lightIndex=0;
+function openLightbox(imgs,index,title){
+  lightImgs=imgs; lightIndex=index;
+  const box=document.getElementById("imageLightbox");
+  if(!box) return;
+  box.classList.add("show");
+  const im=box.querySelector("img");
+  if(im){im.src=lightImgs[lightIndex];im.alt=title;}
+}
+function closeLightbox(){
+  const box=document.getElementById("imageLightbox");
+  if(box) box.classList.remove("show");
+}
+function moveLight(step){
+  if(!lightImgs.length)return;
+  lightIndex=(lightIndex+step+lightImgs.length)%lightImgs.length;
+  const im=document.querySelector("#imageLightbox img");
+  if(im)im.src=lightImgs[lightIndex];
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  const back=document.getElementById("detailBack");
+  if(back)back.addEventListener("click",closeProductDetail);
+  const lb=document.getElementById("imageLightbox");
+  if(lb)lb.addEventListener("click",e=>{if(e.target===lb)closeLightbox();});
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){closeLightbox();closeProductDetail();}
+    if(e.key==="ArrowLeft")moveLight(-1);
+    if(e.key==="ArrowRight")moveLight(1);
+  });
+  renderProducts();
+});
+window.openProductDetail=openProductDetail;
+window.closeProductDetail=closeProductDetail;
+})();
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const buttons=document.querySelectorAll(".left-menu button");
+  buttons.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      buttons.forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      const cat=btn.dataset.maincat;
+      if(cat==="products"){
+        const grid=document.getElementById("productGrid");
+        if(grid) grid.closest("section")?.scrollIntoView({behavior:"smooth",block:"start"});
+      }else{
+        const serviceTitle=[...document.querySelectorAll("h2,h1,h3")].find(el=>{
+          const t=el.textContent.trim();
+          return (cat==="carport" && t.includes("บริการของ K-Roof")) ||
+                 (cat==="awning" && t.includes("บริการของ K-Roof")) ||
+                 (cat==="structure" && t.includes("บริการของ K-Roof"));
+        });
+        const serviceSection=document.querySelector('[id*="service"], .services');
+        if(serviceSection) serviceSection.scrollIntoView({behavior:"smooth",block:"start"});
+        else if(serviceTitle) serviceTitle.scrollIntoView({behavior:"smooth",block:"start"});
+      }
+    });
+  });
+});
+</script>
+
+
+<script>
+function go(sectionId){
+  const el=document.getElementById(sectionId);
+  if(!el) return;
+  const header=document.querySelector("header");
+  const offset=header ? header.offsetHeight + 12 : 12;
+  const y=el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({top:Math.max(0,y),behavior:"smooth"});
+}
+function toggleAdmin(){
+  const el=document.getElementById("admin");
+  if(!el) return;
+  const hidden=getComputedStyle(el).display==="none";
+  el.style.display=hidden ? "block" : "none";
+  if(hidden){
+    setTimeout(()=>el.scrollIntoView({behavior:"smooth",block:"start"}),50);
+  }
+}
+</script>
+
+
+<div id="cloudLogin"><div class="cloud-box"><h3>เข้าสู่ระบบผู้ดูแล K-Roof</h3><div class="cloud-note">ลูกค้าทั่วไปไม่สามารถแก้ไขข้อมูลได้</div><label>อีเมล</label><input id="cloudEmail" type="email" autocomplete="username"><label>รหัสผ่าน</label><input id="cloudPassword" type="password" autocomplete="current-password"><div class="cloud-actions"><button class="cloud-btn cloud-primary" id="cloudLoginBtn">เข้าสู่ระบบ</button><button class="cloud-btn cloud-muted" id="cloudCancelBtn">ยกเลิก</button></div><div id="cloudLoginMsg" class="cloud-note"></div></div></div>
+
+<script>
+(function(){
+const C=window.KROOF_CONFIG||{}; let sb=null, cloudProducts=[], cloudServices=[], cloudProductImgs={}, cloudServiceImgs={}; let adminUser=null;
+const baseProducts=[['p0','vinyl','VG Snow Roof','ไวนิล • VG'],['p1','vinyl','VG Glacia','ไวนิล • VG'],['p2','vinyl','VG Winter Roof','ไวนิล • VG'],['p3','vinyl','VG Winter Plus','ไวนิล • VG'],['p4','vinyl','RoofyRoof','ไวนิล'],['p5','vinyl','ภูเขา PR4','ไวนิล • ภูเขา'],['p6','vinyl','ภูเขา PR5','ไวนิล • ภูเขา'],['p7','vinyl','ภูเขา PR8','ไวนิล • ภูเขา'],['p8','fiberglass','JROOF','ไฟเบอร์กลาส'],['p9','fiberglass','Mini Gold','ไฟเบอร์กลาส'],['p10','fiberglass','D-Line','ไฟเบอร์กลาส'],['p11','poly','โพลีคาร์บอเนต','โพลีคาร์บอเนต']];
+const baseServices=[['car1','โรงจอดรถ 1 คัน'],['car2','โรงจอดรถ 2 คัน'],['car3','โรงจอดรถ 3 คัน'],['car4','โรงจอดรถ 4 คัน + รูฟ'],['awning','กันสาด'],['roof','ทำหลังคา']];
+function configured(){return C.supabaseUrl&&C.supabaseKey&&!C.supabaseUrl.includes('ใส่-')&&!C.supabaseKey.includes('ใส่-')}
+function storagePath(value){
+  if(!value) return null;
+  if(/^https?:\/\//i.test(value)){
+    const marker='/kroof/';
+    const i=value.indexOf(marker);
+    return i>=0 ? decodeURIComponent(value.slice(i+marker.length).split('?')[0]) : null;
+  }
+  return value;
+}
+function url(value){
+  if(!value) return '';
+  if(/^https?:\/\//i.test(value)) return value;
+  return sb.storage.from('kroof').getPublicUrl(value).data.publicUrl;
+}
+async function init(){if(!configured()||!window.supabase)return; sb=window.supabase.createClient(C.supabaseUrl,C.supabaseKey); const s=await sb.auth.getSession(); adminUser=s.data.session?.user||null; await loadCloud(); if(adminUser) showAdmin();}
+async function loadCloud(){
+  if(!sb)return;
+  const a=await sb.from('products').select('*');
+  if(a.error)msg('อ่านตาราง products ไม่สำเร็จ: '+a.error.message);else if(a.data?.length)cloudProducts=a.data;
+  const b=await sb.from('services').select('*');
+  if(b.error)msg('อ่านตาราง services ไม่สำเร็จ: '+b.error.message);else cloudServices=b.data||[];
+  const pi=await sb.from('product_images').select('*');
+  cloudProductImgs={};
+  if(pi.error)msg('อ่านรูปสินค้าไม่สำเร็จ: '+pi.error.message);
+  (pi.data||[]).sort((x,y)=>(x.sort_order||0)-(y.sort_order||0)).forEach(x=>(cloudProductImgs[x.product_id]??=[]).push({...x,storage_path:storagePath(x.image_url||x.path),url:url(x.image_url||x.path)}));
+  const si=await sb.from('service_images').select('*');
+  cloudServiceImgs={};
+  if(si.error)msg('อ่านรูปบริการไม่สำเร็จ: '+si.error.message);
+  (si.data||[]).sort((x,y)=>(x.sort_order||0)-(y.sort_order||0)).forEach(x=>(cloudServiceImgs[x.service_id]??=[]).push({...x,storage_path:storagePath(x.image_url||x.path),url:url(x.image_url||x.path)}));
+  if(cloudProducts.length)renderCloudProducts();renderCloudServices();
+}
+function renderCloudProducts(){const grid=document.getElementById('productGrid');if(!grid)return;grid.innerHTML='';cloudProducts.forEach((p,i)=>{const imgs=cloudProductImgs[p.id]||[];const card=document.createElement('div');card.className='card';card.innerHTML='<div class="pic product-card-click">'+(imgs[0]?'<img src="'+imgs[0].url+'" alt="'+p.name+'">':'<div class="placeholder">ยังไม่มีรูป<br><b>เพิ่มได้ภายหลัง</b></div>')+'</div><div class="card-body"><span class="tag">'+p.tag+'</span><h3>'+p.name+'</h3><div class="card-actions"><button class="price-btn">สอบถามราคา</button><button class="detail-btn">รายละเอียด</button></div></div>';card.querySelector('.pic').onclick=()=>cloudDetail(p.id);card.querySelector('.detail-btn').onclick=()=>cloudDetail(p.id);card.querySelector('.price-btn').onclick=e=>{e.stopPropagation();alert('กรุณาติดต่อ K-Roof เพื่อสอบถามราคา')};grid.appendChild(card);});}
+async function cloudDetail(id){const p=cloudProducts.find(x=>x.id===id);if(!p)return;const page=document.getElementById('productDetailPage');document.getElementById('detailTitle').textContent=p.name;const spec=p.specs||{};document.getElementById('detailSpecs').innerHTML=Object.entries(spec).filter(([k,v])=>String(v||'').trim()).map(([k,v])=>'<div class="detail-spec-row"><span class="detail-spec-key">'+k+'</span><span class="detail-spec-value">'+String(v).replace(/\n/g,'<br>')+'</span></div>').join('')||'<div style="color:#718092">ยังไม่มีรายละเอียดสินค้า</div>';const imgs=cloudProductImgs[id]||[];const box=document.getElementById('detailImages');box.innerHTML=imgs.length?imgs.map((x,i)=>'<div class="detail-image"><img src="'+x.url+'"></div>').join(''):'<div class="detail-empty" style="grid-column:1/-1">ยังไม่มีรูปสินค้า</div>';[...box.querySelectorAll('.detail-image')].forEach((el,i)=>el.onclick=()=>openCloudLightbox(imgs.map(x=>x.url),i,p.name));page.classList.add('show');window.scrollTo(0,0);}
+function renderCloudServices(){baseServices.forEach(([id])=>{const box=document.getElementById('spic-'+id);const imgs=cloudServiceImgs[id]||[];if(box&&imgs[0])box.innerHTML='<img src="'+imgs[0].url+'">';});}
+function showLogin(){document.getElementById('cloudLogin').classList.add('show');}
+function hideLogin(){document.getElementById('cloudLogin').classList.remove('show');}
+function showAdmin(){
+  const adminSection=document.getElementById('admin');
+  if(adminSection) adminSection.style.display='block';
+  document.querySelectorAll('#admin .admin-row, #admin > .admin-inner > .note').forEach(el=>el.style.display='none');
+  document.getElementById('cloudAdminPanel').style.display='block';
+  populateEditor();
+}
+function hideAdmin(){
+  document.getElementById('cloudAdminPanel').style.display='none';
+  const adminSection=document.getElementById('admin');
+  if(adminSection) adminSection.style.display='none';
+}
+async function toggle(){
+  if(!configured()){alert('ยังไม่ได้ตั้งค่า Supabase ใน config.js กรุณาตรวจไฟล์ config.js');return;}
+  if(!sb){try{await init();}catch(e){alert('เชื่อมต่อ Supabase ไม่สำเร็จ: '+(e.message||e));return;}}
+  if(adminUser){showAdmin();document.getElementById('admin').scrollIntoView({behavior:'smooth',block:'start'});}
+  else showLogin();
+}
+async function login(){
+  const email=document.getElementById('cloudEmail').value.trim(),password=document.getElementById('cloudPassword').value;
+  const m=document.getElementById('cloudLoginMsg');
+  if(!sb){m.textContent='ยังเชื่อมต่อฐานข้อมูลไม่ได้ กรุณารีเฟรชหน้าเว็บ';return;}
+  m.textContent='กำลังเข้าสู่ระบบ...';
+  const r=await sb.auth.signInWithPassword({email,password});
+  if(r.error){m.textContent='เข้าสู่ระบบไม่สำเร็จ: '+r.error.message;return;}
+  adminUser=r.data.user;hideLogin();showAdmin();
+  document.getElementById('admin').scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function logout(){await sb.auth.signOut();adminUser=null;hideAdmin();}
+function populateEditor(){const ps=cloudProducts.length?cloudProducts:baseProducts.map(x=>({id:x[0],name:x[2],specs:{}}));const sel=document.getElementById('cloudProduct');sel.innerHTML=ps.map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join('');const ss=cloudServices.length?cloudServices:baseServices.map(([id,name])=>({id,name}));document.getElementById('cloudService').innerHTML=ss.map(s=>'<option value="'+s.id+'">'+s.name+'</option>').join('');loadEditor();loadServiceImages();}
+function loadEditor(){const p=cloudProducts.find(x=>x.id===document.getElementById('cloudProduct').value);if(!p)return;const s=p.specs||{};document.getElementById('cloudName').value=p.name||'';document.getElementById('cloudWidth').value=s['ความกว้าง']||'';document.getElementById('cloudThickness').value=s['ความหนา']||'';document.getElementById('cloudLength').value=s['ความยาว']||'';document.getElementById('cloudColors').value=s['สี']||'';document.getElementById('cloudMaterial').value=s['วัสดุ']||'';document.getElementById('cloudPurlin').value=s['ระยะแป']||'';document.getElementById('cloudSlope').value=s['ความลาดชัน']||s['องศาหลังคา']||'';document.getElementById('cloudMore').value=s['รายละเอียดเพิ่มเติม']||'';renderEditorImages();}
+function renderEditorImages(){const id=document.getElementById('cloudProduct').value;const box=document.getElementById('cloudProductImages');box.innerHTML=(cloudProductImgs[id]||[]).map(x=>'<div class="cloud-img"><img src="'+x.url+'"><button data-id="'+x.id+'" data-path="'+(x.storage_path||'')+'">×</button></div>').join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>deleteProductImage(b.dataset.id,b.dataset.path));}
+function loadServiceImages(){const id=document.getElementById('cloudService').value;document.getElementById('cloudServiceImages').innerHTML=(cloudServiceImgs[id]||[]).map(x=>'<div class="cloud-img"><img src="'+x.url+'"><button data-id="'+x.id+'" data-path="'+(x.storage_path||'')+'">×</button></div>').join('');document.querySelectorAll('#cloudServiceImages button').forEach(b=>b.onclick=()=>deleteServiceImage(b.dataset.id,b.dataset.path));}
+async function saveProduct(){
+  const id=document.getElementById('cloudProduct').value;
+  const p=cloudProducts.find(x=>x.id===id);
+  if(!p){msg('ไม่พบสินค้าในฐานข้อมูล กรุณาตรวจตาราง products');return}
+  const spec={
+    'ความกว้าง':document.getElementById('cloudWidth').value.trim(),
+    'ความหนา':document.getElementById('cloudThickness').value.trim(),
+    'ความยาว':document.getElementById('cloudLength').value.trim(),
+    'สี':document.getElementById('cloudColors').value.trim(),
+    'วัสดุ':document.getElementById('cloudMaterial').value.trim(),
+    'ระยะแป':document.getElementById('cloudPurlin').value.trim(),
+    'ความลาดชัน':document.getElementById('cloudSlope').value.trim(),
+    'รายละเอียดเพิ่มเติม':document.getElementById('cloudMore').value.trim()
+  };
+  Object.keys(spec).forEach(k=>{if(!spec[k])delete spec[k]});
+  const r=await sb.from('products').update({
+    name:document.getElementById('cloudName').value.trim(),
+    specs,
+    updated_at:new Date().toISOString()
+  }).eq('id',id);
+  if(r.error){msg('บันทึกสินค้าไม่สำเร็จ: '+r.error.message);return}
+  const uploadError=await uploadFiles('product',id,document.getElementById('cloudProductFiles').files);
+  if(uploadError){msg('บันทึกข้อมูลสินค้าแล้ว แต่บันทึกรูปไม่ครบ: '+uploadError);return}
+  msg('บันทึกสินค้าและรูปแล้ว');
+  await loadCloud();
+  populateEditor();
+}
+async function saveService(){
+  const id=document.getElementById('cloudService').value;
+  if(!id){msg('กรุณาเลือกประเภทบริการ');return}
+  const uploadError=await uploadFiles('service',id,document.getElementById('cloudServiceFiles').files);
+  if(uploadError){msg('บันทึกรูปบริการไม่สำเร็จ: '+uploadError);return}
+  msg('บันทึกรูปบริการแล้ว');
+  await loadCloud();
+  populateEditor();
+}
+async function uploadFiles(type,id,files){
+  for(const f of [...files]){
+    const safe=f.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    const path=type+'s/'+id+'/'+Date.now()+'_'+Math.random().toString(36).slice(2)+'_'+safe;
+    const u=await sb.storage.from('kroof').upload(path,f,{upsert:false});
+    if(u.error)return u.error.message;
+    const table=type==='product'?'product_images':'service_images';
+    const field=type==='product'?'product_id':'service_id';
+    const r=await sb.from(table).insert({[field]:id,image_url:path,sort_order:Date.now()});
+    if(r.error){
+      await sb.storage.from('kroof').remove([path]);
+      return r.error.message;
+    }
+  }
+  return null;
+}
+async function deleteProductImage(id,path){
+  if(!confirm('ลบรูปนี้ใช่ไหม?'))return;
+  if(path){
+    const storage=await sb.storage.from('kroof').remove([path]);
+    if(storage.error){msg('ลบไฟล์รูปไม่สำเร็จ: '+storage.error.message);return}
+  }
+  const r=await sb.from('product_images').delete().eq('id',id);
+  if(r.error){msg('ลบข้อมูลรูปไม่สำเร็จ: '+r.error.message);return}
+  await loadCloud();
+  populateEditor();
+}
+async function deleteServiceImage(id,path){
+  if(!confirm('ลบรูปนี้ใช่ไหม?'))return;
+  if(path){
+    const storage=await sb.storage.from('kroof').remove([path]);
+    if(storage.error){msg('ลบไฟล์รูปไม่สำเร็จ: '+storage.error.message);return}
+  }
+  const r=await sb.from('service_images').delete().eq('id',id);
+  if(r.error){msg('ลบข้อมูลรูปไม่สำเร็จ: '+r.error.message);return}
+  await loadCloud();
+  populateEditor();
+}
+function msg(t){document.getElementById('cloudMsg').textContent=t;}
+function openCloudLightbox(imgs,i,title){window.__cloudImgs=imgs;window.__cloudI=i;const b=document.getElementById('imageLightbox');b.classList.add('show');document.getElementById('lightboxImage').src=imgs[i];document.getElementById('lightboxCaption').textContent=title;}
+window.changeGallery=function(d){const a=window.__cloudImgs||[];if(!a.length)return;window.__cloudI=(window.__cloudI+d+a.length)%a.length;document.getElementById('lightboxImage').src=a[window.__cloudI]};window.closeImageLightbox=function(){document.getElementById('imageLightbox').classList.remove('show')};window.openGallery=async function(key,title){const id=key.split(':')[1],imgs=cloudServiceImgs[id]||[];const m=document.getElementById('galleryModal');document.getElementById('galleryTitle').textContent=title;document.getElementById('galleryFolderName').textContent=title;document.getElementById('galleryThumbs').innerHTML=imgs.map((x,i)=>'<img src="'+x.url+'" style="width:100%;border-radius:10px;cursor:pointer" data-i="'+i+'">').join('');document.getElementById('galleryEmpty').style.display=imgs.length?'none':'block';document.getElementById('galleryModal').classList.add('show');document.querySelectorAll('#galleryThumbs img').forEach((im,i)=>im.onclick=()=>openCloudLightbox(imgs.map(x=>x.url),i,title));};window.closeGallery=function(){document.getElementById('galleryModal').classList.remove('show')};window.closeProductPage=function(){document.getElementById('productPage').classList.remove('show')};window.toggleAdmin=toggle;window.saveProductImages=()=>saveProduct();window.saveServiceImages=()=>saveService();
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('cloudLoginBtn').onclick=()=>login().catch(e=>{document.getElementById('cloudLoginMsg').textContent=e.message||String(e);});
+  document.getElementById('cloudCancelBtn').onclick=hideLogin;
+  document.getElementById('cloudLogout').onclick=()=>logout().catch(e=>msg(e.message||String(e)));
+  document.getElementById('cloudProduct').onchange=loadEditor;
+  document.getElementById('cloudService').onchange=loadServiceImages;
+  document.getElementById('cloudSaveProduct').onclick=()=>saveProduct().catch(e=>msg('บันทึกไม่สำเร็จ: '+(e.message||e)));
+  document.getElementById('cloudSaveService').onclick=()=>saveService().catch(e=>msg('บันทึกไม่สำเร็จ: '+(e.message||e)));
+  init().catch(e=>{const el=document.getElementById('cloudMsg');if(el)el.textContent='เชื่อมต่อระบบไม่สำเร็จ: '+(e.message||e);});
+});
+})();
+</script>
+</body>
+</html>
