@@ -807,7 +807,20 @@ const C=window.KROOF_CONFIG||{}; let sb=null, cloudProducts=[], cloudServices=[]
 const baseProducts=[['p0','vinyl','VG Snow Roof','ไวนิล • VG'],['p1','vinyl','VG Glacia','ไวนิล • VG'],['p2','vinyl','VG Winter Roof','ไวนิล • VG'],['p3','vinyl','VG Winter Plus','ไวนิล • VG'],['p4','vinyl','RoofyRoof','ไวนิล'],['p5','vinyl','ภูเขา PR4','ไวนิล • ภูเขา'],['p6','vinyl','ภูเขา PR5','ไวนิล • ภูเขา'],['p7','vinyl','ภูเขา PR8','ไวนิล • ภูเขา'],['p8','fiberglass','JROOF','ไฟเบอร์กลาส'],['p9','fiberglass','Mini Gold','ไฟเบอร์กลาส'],['p10','fiberglass','D-Line','ไฟเบอร์กลาส'],['p11','poly','โพลีคาร์บอเนต','โพลีคาร์บอเนต']];
 const baseServices=[['car1','โรงจอดรถ 1 คัน'],['car2','โรงจอดรถ 2 คัน'],['car3','โรงจอดรถ 3 คัน'],['car4','โรงจอดรถ 4 คัน + รูฟ'],['awning','กันสาด'],['roof','ทำหลังคา']];
 function configured(){return C.supabaseUrl&&C.supabaseKey&&!C.supabaseUrl.includes('ใส่-')&&!C.supabaseKey.includes('ใส่-')}
-function url(path){return sb.storage.from('kroof').getPublicUrl(path).data.publicUrl}
+function storagePath(value){
+  if(!value) return null;
+  if(/^https?:\/\//i.test(value)){
+    const marker='/kroof/';
+    const i=value.indexOf(marker);
+    return i>=0 ? decodeURIComponent(value.slice(i+marker.length).split('?')[0]) : null;
+  }
+  return value;
+}
+function url(value){
+  if(!value) return '';
+  if(/^https?:\/\//i.test(value)) return value;
+  return sb.storage.from('kroof').getPublicUrl(value).data.publicUrl;
+}
 async function init(){if(!configured()||!window.supabase)return; sb=window.supabase.createClient(C.supabaseUrl,C.supabaseKey); const s=await sb.auth.getSession(); adminUser=s.data.session?.user||null; await loadCloud(); if(adminUser) showAdmin();}
 async function loadCloud(){
   if(!sb)return;
@@ -818,11 +831,11 @@ async function loadCloud(){
   const pi=await sb.from('product_images').select('*');
   cloudProductImgs={};
   if(pi.error)msg('อ่านรูปสินค้าไม่สำเร็จ: '+pi.error.message);
-  (pi.data||[]).sort((x,y)=>(x.sort_order||0)-(y.sort_order||0)).forEach(x=>(cloudProductImgs[x.product_id]??=[]).push({...x,url:url(x.path)}));
+  (pi.data||[]).sort((x,y)=>(x.sort_order||0)-(y.sort_order||0)).forEach(x=>(cloudProductImgs[x.product_id]??=[]).push({...x,storage_path:storagePath(x.image_url||x.path),url:url(x.image_url||x.path)}));
   const si=await sb.from('service_images').select('*');
   cloudServiceImgs={};
   if(si.error)msg('อ่านรูปบริการไม่สำเร็จ: '+si.error.message);
-  (si.data||[]).sort((x,y)=>(x.sort_order||0)-(y.sort_order||0)).forEach(x=>(cloudServiceImgs[x.service_id]??=[]).push({...x,url:url(x.path)}));
+  (si.data||[]).sort((x,y)=>(x.sort_order||0)-(y.sort_order||0)).forEach(x=>(cloudServiceImgs[x.service_id]??=[]).push({...x,storage_path:storagePath(x.image_url||x.path),url:url(x.image_url||x.path)}));
   if(cloudProducts.length)renderCloudProducts();renderCloudServices();
 }
 function renderCloudProducts(){const grid=document.getElementById('productGrid');if(!grid)return;grid.innerHTML='';cloudProducts.forEach((p,i)=>{const imgs=cloudProductImgs[p.id]||[];const card=document.createElement('div');card.className='card';card.innerHTML='<div class="pic product-card-click">'+(imgs[0]?'<img src="'+imgs[0].url+'" alt="'+p.name+'">':'<div class="placeholder">ยังไม่มีรูป<br><b>เพิ่มได้ภายหลัง</b></div>')+'</div><div class="card-body"><span class="tag">'+p.tag+'</span><h3>'+p.name+'</h3><div class="card-actions"><button class="price-btn">สอบถามราคา</button><button class="detail-btn">รายละเอียด</button></div></div>';card.querySelector('.pic').onclick=()=>cloudDetail(p.id);card.querySelector('.detail-btn').onclick=()=>cloudDetail(p.id);card.querySelector('.price-btn').onclick=e=>{e.stopPropagation();alert('กรุณาติดต่อ K-Roof เพื่อสอบถามราคา')};grid.appendChild(card);});}
@@ -859,15 +872,84 @@ async function login(){
   document.getElementById('admin').scrollIntoView({behavior:'smooth',block:'start'});
 }
 async function logout(){await sb.auth.signOut();adminUser=null;hideAdmin();}
-function populateEditor(){const ps=cloudProducts.length?cloudProducts:baseProducts.map(x=>({id:x[0],name:x[2],specs:{}}));const sel=document.getElementById('cloudProduct');sel.innerHTML=ps.map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join('');const ss=cloudServices.length?cloudServices:baseServices;document.getElementById('cloudService').innerHTML=ss.map(s=>'<option value="'+s.id+'">'+s.name+'</option>').join('');loadEditor();loadServiceImages();}
+function populateEditor(){const ps=cloudProducts.length?cloudProducts:baseProducts.map(x=>({id:x[0],name:x[2],specs:{}}));const sel=document.getElementById('cloudProduct');sel.innerHTML=ps.map(p=>'<option value="'+p.id+'">'+p.name+'</option>').join('');const ss=cloudServices.length?cloudServices:baseServices.map(([id,name])=>({id,name}));document.getElementById('cloudService').innerHTML=ss.map(s=>'<option value="'+s.id+'">'+s.name+'</option>').join('');loadEditor();loadServiceImages();}
 function loadEditor(){const p=cloudProducts.find(x=>x.id===document.getElementById('cloudProduct').value);if(!p)return;const s=p.specs||{};document.getElementById('cloudName').value=p.name||'';document.getElementById('cloudWidth').value=s['ความกว้าง']||'';document.getElementById('cloudThickness').value=s['ความหนา']||'';document.getElementById('cloudLength').value=s['ความยาว']||'';document.getElementById('cloudColors').value=s['สี']||'';document.getElementById('cloudMaterial').value=s['วัสดุ']||'';document.getElementById('cloudPurlin').value=s['ระยะแป']||'';document.getElementById('cloudSlope').value=s['ความลาดชัน']||s['องศาหลังคา']||'';document.getElementById('cloudMore').value=s['รายละเอียดเพิ่มเติม']||'';renderEditorImages();}
-function renderEditorImages(){const id=document.getElementById('cloudProduct').value;const box=document.getElementById('cloudProductImages');box.innerHTML=(cloudProductImgs[id]||[]).map(x=>'<div class="cloud-img"><img src="'+x.url+'"><button data-id="'+x.id+'" data-path="'+x.path+'">×</button></div>').join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>deleteProductImage(b.dataset.id,b.dataset.path));}
-function loadServiceImages(){const id=document.getElementById('cloudService').value;document.getElementById('cloudServiceImages').innerHTML=(cloudServiceImgs[id]||[]).map(x=>'<div class="cloud-img"><img src="'+x.url+'"><button data-id="'+x.id+'" data-path="'+x.path+'">×</button></div>').join('');document.querySelectorAll('#cloudServiceImages button').forEach(b=>b.onclick=()=>deleteServiceImage(b.dataset.id,b.dataset.path));}
-async function saveProduct(){const id=document.getElementById('cloudProduct').value,p=cloudProducts.find(x=>x.id===id);if(!p)return;const spec={'ความกว้าง':document.getElementById('cloudWidth').value.trim(),'ความหนา':document.getElementById('cloudThickness').value.trim(),'ความยาว':document.getElementById('cloudLength').value.trim(),'สี':document.getElementById('cloudColors').value.trim(),'วัสดุ':document.getElementById('cloudMaterial').value.trim(),'ระยะแป':document.getElementById('cloudPurlin').value.trim(),'ความลาดชัน':document.getElementById('cloudSlope').value.trim(),'รายละเอียดเพิ่มเติม':document.getElementById('cloudMore').value.trim()};Object.keys(spec).forEach(k=>{if(!spec[k])delete spec[k]});let r=await sb.from('products').update({name:document.getElementById('cloudName').value.trim(),specs:spec,updated_at:new Date().toISOString()}).eq('id',id);if(r.error){msg(r.error.message);return}await uploadFiles('product',id,document.getElementById('cloudProductFiles').files);msg('บันทึกสินค้าและรูปแล้ว');await loadCloud();populateEditor();}
-async function saveService(){const id=document.getElementById('cloudService').value;await uploadFiles('service',id,document.getElementById('cloudServiceFiles').files);msg('บันทึกรูปบริการแล้ว');await loadCloud();populateEditor();}
-async function uploadFiles(type,id,files){for(const f of [...files]){const safe=f.name.replace(/[^a-zA-Z0-9._-]/g,'_');const path=type+'s/'+id+'/'+Date.now()+'_'+Math.random().toString(36).slice(2)+'_'+safe;const u=await sb.storage.from('kroof').upload(path,f,{upsert:false});if(u.error){msg(u.error.message);continue}const table=type==='product'?'product_images':'service_images';const field=type==='product'?'product_id':'service_id';const r=await sb.from(table).insert({[field]:id,path,sort_order:Date.now()});if(r.error)msg(r.error.message);}}
-async function deleteProductImage(id,path){if(!confirm('ลบรูปนี้ใช่ไหม?'))return;await sb.storage.from('kroof').remove([path]);await sb.from('product_images').delete().eq('id',id);await loadCloud();populateEditor();}
-async function deleteServiceImage(id,path){if(!confirm('ลบรูปนี้ใช่ไหม?'))return;await sb.storage.from('kroof').remove([path]);await sb.from('service_images').delete().eq('id',id);await loadCloud();populateEditor();}
+function renderEditorImages(){const id=document.getElementById('cloudProduct').value;const box=document.getElementById('cloudProductImages');box.innerHTML=(cloudProductImgs[id]||[]).map(x=>'<div class="cloud-img"><img src="'+x.url+'"><button data-id="'+x.id+'" data-path="'+(x.storage_path||'')+'">×</button></div>').join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>deleteProductImage(b.dataset.id,b.dataset.path));}
+function loadServiceImages(){const id=document.getElementById('cloudService').value;document.getElementById('cloudServiceImages').innerHTML=(cloudServiceImgs[id]||[]).map(x=>'<div class="cloud-img"><img src="'+x.url+'"><button data-id="'+x.id+'" data-path="'+(x.storage_path||'')+'">×</button></div>').join('');document.querySelectorAll('#cloudServiceImages button').forEach(b=>b.onclick=()=>deleteServiceImage(b.dataset.id,b.dataset.path));}
+async function saveProduct(){
+  const id=document.getElementById('cloudProduct').value;
+  const p=cloudProducts.find(x=>x.id===id);
+  if(!p){msg('ไม่พบสินค้าในฐานข้อมูล กรุณาตรวจตาราง products');return}
+  const spec={
+    'ความกว้าง':document.getElementById('cloudWidth').value.trim(),
+    'ความหนา':document.getElementById('cloudThickness').value.trim(),
+    'ความยาว':document.getElementById('cloudLength').value.trim(),
+    'สี':document.getElementById('cloudColors').value.trim(),
+    'วัสดุ':document.getElementById('cloudMaterial').value.trim(),
+    'ระยะแป':document.getElementById('cloudPurlin').value.trim(),
+    'ความลาดชัน':document.getElementById('cloudSlope').value.trim(),
+    'รายละเอียดเพิ่มเติม':document.getElementById('cloudMore').value.trim()
+  };
+  Object.keys(spec).forEach(k=>{if(!spec[k])delete spec[k]});
+  const r=await sb.from('products').update({
+    name:document.getElementById('cloudName').value.trim(),
+    specs,
+    updated_at:new Date().toISOString()
+  }).eq('id',id);
+  if(r.error){msg('บันทึกสินค้าไม่สำเร็จ: '+r.error.message);return}
+  const uploadError=await uploadFiles('product',id,document.getElementById('cloudProductFiles').files);
+  if(uploadError){msg('บันทึกข้อมูลสินค้าแล้ว แต่บันทึกรูปไม่ครบ: '+uploadError);return}
+  msg('บันทึกสินค้าและรูปแล้ว');
+  await loadCloud();
+  populateEditor();
+}
+async function saveService(){
+  const id=document.getElementById('cloudService').value;
+  if(!id){msg('กรุณาเลือกประเภทบริการ');return}
+  const uploadError=await uploadFiles('service',id,document.getElementById('cloudServiceFiles').files);
+  if(uploadError){msg('บันทึกรูปบริการไม่สำเร็จ: '+uploadError);return}
+  msg('บันทึกรูปบริการแล้ว');
+  await loadCloud();
+  populateEditor();
+}
+async function uploadFiles(type,id,files){
+  for(const f of [...files]){
+    const safe=f.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    const path=type+'s/'+id+'/'+Date.now()+'_'+Math.random().toString(36).slice(2)+'_'+safe;
+    const u=await sb.storage.from('kroof').upload(path,f,{upsert:false});
+    if(u.error)return u.error.message;
+    const table=type==='product'?'product_images':'service_images';
+    const field=type==='product'?'product_id':'service_id';
+    const r=await sb.from(table).insert({[field]:id,image_url:path,sort_order:Date.now()});
+    if(r.error){
+      await sb.storage.from('kroof').remove([path]);
+      return r.error.message;
+    }
+  }
+  return null;
+}
+async function deleteProductImage(id,path){
+  if(!confirm('ลบรูปนี้ใช่ไหม?'))return;
+  if(path){
+    const storage=await sb.storage.from('kroof').remove([path]);
+    if(storage.error){msg('ลบไฟล์รูปไม่สำเร็จ: '+storage.error.message);return}
+  }
+  const r=await sb.from('product_images').delete().eq('id',id);
+  if(r.error){msg('ลบข้อมูลรูปไม่สำเร็จ: '+r.error.message);return}
+  await loadCloud();
+  populateEditor();
+}
+async function deleteServiceImage(id,path){
+  if(!confirm('ลบรูปนี้ใช่ไหม?'))return;
+  if(path){
+    const storage=await sb.storage.from('kroof').remove([path]);
+    if(storage.error){msg('ลบไฟล์รูปไม่สำเร็จ: '+storage.error.message);return}
+  }
+  const r=await sb.from('service_images').delete().eq('id',id);
+  if(r.error){msg('ลบข้อมูลรูปไม่สำเร็จ: '+r.error.message);return}
+  await loadCloud();
+  populateEditor();
+}
 function msg(t){document.getElementById('cloudMsg').textContent=t;}
 function openCloudLightbox(imgs,i,title){window.__cloudImgs=imgs;window.__cloudI=i;const b=document.getElementById('imageLightbox');b.classList.add('show');document.getElementById('lightboxImage').src=imgs[i];document.getElementById('lightboxCaption').textContent=title;}
 window.changeGallery=function(d){const a=window.__cloudImgs||[];if(!a.length)return;window.__cloudI=(window.__cloudI+d+a.length)%a.length;document.getElementById('lightboxImage').src=a[window.__cloudI]};window.closeImageLightbox=function(){document.getElementById('imageLightbox').classList.remove('show')};window.openGallery=async function(key,title){const id=key.split(':')[1],imgs=cloudServiceImgs[id]||[];const m=document.getElementById('galleryModal');document.getElementById('galleryTitle').textContent=title;document.getElementById('galleryFolderName').textContent=title;document.getElementById('galleryThumbs').innerHTML=imgs.map((x,i)=>'<img src="'+x.url+'" style="width:100%;border-radius:10px;cursor:pointer" data-i="'+i+'">').join('');document.getElementById('galleryEmpty').style.display=imgs.length?'none':'block';document.getElementById('galleryModal').classList.add('show');document.querySelectorAll('#galleryThumbs img').forEach((im,i)=>im.onclick=()=>openCloudLightbox(imgs.map(x=>x.url),i,title));};window.closeGallery=function(){document.getElementById('galleryModal').classList.remove('show')};window.closeProductPage=function(){document.getElementById('productPage').classList.remove('show')};window.toggleAdmin=toggle;window.saveProductImages=()=>saveProduct();window.saveServiceImages=()=>saveService();
