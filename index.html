@@ -966,7 +966,7 @@ async function saveProduct(){
   try{
     let id;
     if(isCreatingProduct){
-      const r=await sb.from("products").insert({name,category,specs}).select().single();
+      const newProductId="prod-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8); const r=await sb.from("products").insert({id:newProductId,name,category,specs}).select().single();
       if(r.error)throw new Error("เพิ่มข้อมูลสินค้าไม่สำเร็จ: "+r.error.message);
       id=r.data.id;
     }else{
