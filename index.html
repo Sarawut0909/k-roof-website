@@ -1026,6 +1026,7 @@ async function uploadFiles(type,id,files){
   if(!sb) return {ok:false,error:"ยังไม่ได้เชื่อมต่อ Supabase"};
   if(!id) return {ok:false,error:"ไม่พบรหัสสินค้า/บริการ"};
   if(!files||!files.length)return {ok:true};
+  let order=0;
   for(const f of Array.from(files)){
     const safe=f.name.replace(/[^a-zA-Z0-9._-]/g,"_");
     const path=(type==="product"?"products/":"services/")+id+"/"+Date.now()+"_"+Math.random().toString(36).slice(2)+"_"+safe;
@@ -1034,7 +1035,7 @@ async function uploadFiles(type,id,files){
     const table=type==="product"?"product_images":"service_images";
     const field=type==="product"?"product_id":"service_id";
     const imageUrl=sb.storage.from("kroof").getPublicUrl(path).data.publicUrl;
-    const saved=await sb.from(table).insert({[field]:id,image_url:imageUrl,sort_order:Date.now()});
+    const saved=await sb.from(table).insert({[field]:id,image_url:imageUrl,sort_order:++order});
     if(saved.error){
       await sb.storage.from("kroof").remove([path]);
       return {ok:false,error:"อัปโหลดไฟล์แล้ว แต่บันทึกรายการรูปใน "+table+" ไม่สำเร็จ: "+saved.error.message};
