@@ -482,9 +482,14 @@ header nav button{
 <div id="cloudAdminPanel">
 <h3>จัดการข้อมูลออนไลน์ K-Roof</h3>
 <div class="cloud-note">ข้อมูลที่บันทึกตรงนี้จะเป็นข้อมูลกลาง ลูกค้าทุกคนเห็นเหมือนกัน</div>
+<div class="cloud-actions" style="margin:12px 0">
+<button class="cloud-btn cloud-blue" id="cloudNewProduct" type="button">＋ เพิ่มสินค้าใหม่</button>
+<button class="cloud-btn cloud-muted" id="cloudCancelNewProduct" type="button" style="display:none">ยกเลิกเพิ่มสินค้า</button>
+</div>
 <div class="cloud-grid">
-<div><label>สินค้า</label><select id="cloudProduct"></select></div>
-<div><label>ชื่อรุ่น</label><input id="cloudName"></div>
+<div><label>เลือกสินค้าเดิมเพื่อแก้ไข</label><select id="cloudProduct"></select></div>
+<div><label>ชื่อสินค้า / รุ่น</label><input id="cloudName" placeholder="เช่น หลังคารุ่นใหม่"></div>
+<div><label>หมวดหมู่สินค้า</label><input id="cloudCategory" placeholder="เช่น ไวนิล, ไฟเบอร์กลาส, เมทัลชีท PU โฟม"></div>
 <div><label>ความกว้าง</label><input id="cloudWidth"></div>
 <div><label>ความหนา</label><input id="cloudThickness"></div>
 <div><label>ความยาว</label><input id="cloudLength"></div>
@@ -803,7 +808,7 @@ function toggleAdmin(){
 
 <script>
 (function(){
-const C=window.KROOF_CONFIG||{}; let sb=null, cloudProducts=[], cloudServices=[], cloudProductImgs={}, cloudServiceImgs={}; let adminUser=null;
+const C=window.KROOF_CONFIG||{}; let sb=null, cloudProducts=[], cloudServices=[], cloudProductImgs={}, cloudServiceImgs={}; let adminUser=null, isCreatingProduct=false;
 const baseProducts=[['p0','vinyl','VG Snow Roof','ไวนิล • VG'],['p1','vinyl','VG Glacia','ไวนิล • VG'],['p2','vinyl','VG Winter Roof','ไวนิล • VG'],['p3','vinyl','VG Winter Plus','ไวนิล • VG'],['p4','vinyl','RoofyRoof','ไวนิล'],['p5','vinyl','ภูเขา PR4','ไวนิล • ภูเขา'],['p6','vinyl','ภูเขา PR5','ไวนิล • ภูเขา'],['p7','vinyl','ภูเขา PR8','ไวนิล • ภูเขา'],['p8','fiberglass','JROOF','ไฟเบอร์กลาส'],['p9','fiberglass','Mini Gold','ไฟเบอร์กลาส'],['p10','fiberglass','D-Line','ไฟเบอร์กลาส'],['p11','poly','โพลีคาร์บอเนต','โพลีคาร์บอเนต']];
 const baseServices=[['car1','โรงจอดรถ 1 คัน'],['car2','โรงจอดรถ 2 คัน'],['car3','โรงจอดรถ 3 คัน'],['car4','โรงจอดรถ 4 คัน + รูฟ'],['awning','กันสาด'],['roof','ทำหลังคา']];
 function configured(){return C.supabaseUrl&&C.supabaseKey&&!C.supabaseUrl.includes('ใส่-')&&!C.supabaseKey.includes('ใส่-')}
@@ -901,9 +906,11 @@ function populateEditor(){
   loadEditor();loadServiceImages();
 }
 function loadEditor(){
+  if(isCreatingProduct)return;
   const id=document.getElementById("cloudProduct").value,p=cloudProducts.find(x=>String(x.id)===String(id));
   if(!p){renderEditorImages();return;}const s=p.specs&&typeof p.specs==="object"?p.specs:{};
   document.getElementById("cloudName").value=p.name||"";
+  document.getElementById("cloudCategory").value=p.category||p.tag||"";
   document.getElementById("cloudWidth").value=s["ความกว้าง"]||"";
   document.getElementById("cloudThickness").value=s["ความหนา"]||"";
   document.getElementById("cloudLength").value=s["ความยาว"]||"";
@@ -923,17 +930,60 @@ function loadServiceImages(){
   box.innerHTML=(cloudServiceImgs[id]||[]).map(x=>'<div class="cloud-img"><img src="'+x.url+'" alt=""><button data-id="'+x.id+'" data-path="'+x.storage_path+'">×</button></div>').join("");
   box.querySelectorAll("button").forEach(b=>b.onclick=()=>deleteServiceImage(b.dataset.id,b.dataset.path));
 }
+function startNewProduct(){
+  isCreatingProduct=true;
+  document.getElementById("cloudProduct").disabled=true;
+  document.getElementById("cloudNewProduct").style.display="none";
+  document.getElementById("cloudCancelNewProduct").style.display="inline-block";
+  document.getElementById("cloudName").value="";
+  document.getElementById("cloudCategory").value="";
+  ["cloudWidth","cloudThickness","cloudLength","cloudColors","cloudMaterial","cloudPurlin","cloudSlope","cloudMore"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("cloudProductFiles").value="";
+  document.getElementById("cloudProductImages").innerHTML="";
+  msg("กำลังเพิ่มสินค้าใหม่ กรอกชื่อสินค้า หมวดหมู่ รายละเอียด และเลือกรูปภาพ แล้วกดบันทึกสินค้า");
+}
+function cancelNewProduct(){
+  isCreatingProduct=false;
+  document.getElementById("cloudProduct").disabled=false;
+  document.getElementById("cloudNewProduct").style.display="inline-block";
+  document.getElementById("cloudCancelNewProduct").style.display="none";
+  document.getElementById("cloudProductFiles").value="";
+  populateEditor();
+  msg("ยกเลิกการเพิ่มสินค้าใหม่แล้ว");
+}
 async function saveProduct(){
   if(!sb||!adminUser){msg("กรุณาเข้าสู่ระบบผู้ดูแลก่อน");return;}
-  const id=document.getElementById("cloudProduct").value,p=cloudProducts.find(x=>String(x.id)===String(id));if(!p){msg("ไม่พบสินค้าในตาราง products");return;}
+  const name=document.getElementById("cloudName").value.trim();
+  const category=document.getElementById("cloudCategory").value.trim();
+  if(!name){msg("กรุณากรอกชื่อสินค้า");return;}
+  if(!category){msg("กรุณากรอกหมวดหมู่สินค้า เช่น ไวนิล หรือไฟเบอร์กลาส");return;}
   const specs={"ความกว้าง":document.getElementById("cloudWidth").value.trim(),"ความหนา":document.getElementById("cloudThickness").value.trim(),"ความยาว":document.getElementById("cloudLength").value.trim(),"สี":document.getElementById("cloudColors").value.trim(),"วัสดุ":document.getElementById("cloudMaterial").value.trim(),"ระยะแป":document.getElementById("cloudPurlin").value.trim(),"ความลาดชัน":document.getElementById("cloudSlope").value.trim(),"รายละเอียดเพิ่มเติม":document.getElementById("cloudMore").value.trim()};
   Object.keys(specs).forEach(k=>{if(!specs[k])delete specs[k];});
-  const r=await sb.from("products").update({name:document.getElementById("cloudName").value.trim(),specs,updated_at:new Date().toISOString()}).eq("id",id);
-  if(r.error){msg("บันทึกสินค้าไม่สำเร็จ: "+r.error.message);return;}
+  let id;
+  if(isCreatingProduct){
+    const r=await sb.from("products").insert({name,category,specs}).select().single();
+    if(r.error){msg("เพิ่มสินค้าไม่สำเร็จ: "+r.error.message);return;}
+    id=r.data.id;
+  }else{
+    id=document.getElementById("cloudProduct").value;
+    const p=cloudProducts.find(x=>String(x.id)===String(id));
+    if(!p){msg("ไม่พบสินค้าในตาราง products");return;}
+    const r=await sb.from("products").update({name,category,specs,updated_at:new Date().toISOString()}).eq("id",id);
+    if(r.error){msg("บันทึกสินค้าไม่สำเร็จ: "+r.error.message);return;}
+  }
   const files=document.getElementById("cloudProductFiles").files,up=await uploadFiles("product",id,files);
-  if(!up.ok){msg("ข้อมูลสินค้าอัปเดตแล้ว แต่รูปบันทึกไม่สำเร็จ: "+up.error);return;}
-  await loadCloud();populateEditor();msg("บันทึกข้อมูลสินค้าเรียบร้อย"+(files.length?" พร้อมอัปโหลด "+files.length+" รูป":""));
+  if(!up.ok){msg("บันทึกข้อมูลสินค้าแล้ว แต่รูปบันทึกไม่สำเร็จ: "+up.error);return;}
+  isCreatingProduct=false;
+  document.getElementById("cloudProduct").disabled=false;
+  document.getElementById("cloudNewProduct").style.display="inline-block";
+  document.getElementById("cloudCancelNewProduct").style.display="none";
+  document.getElementById("cloudProductFiles").value="";
+  await loadCloud();populateEditor();
+  const sel=document.getElementById("cloudProduct");if([...sel.options].some(o=>String(o.value)===String(id)))sel.value=id;
+  loadEditor();
+  msg((rSafeName(name))+" บันทึกเรียบร้อยแล้ว"+(files.length?" พร้อมอัปโหลด "+files.length+" รูป":""));
 }
+function rSafeName(name){return "สินค้า “"+name+"”";}
 async function saveService(){
   if(!sb||!adminUser){msg("กรุณาเข้าสู่ระบบผู้ดูแลก่อน");return;}
   const id=document.getElementById("cloudService").value,files=document.getElementById("cloudServiceFiles").files;
@@ -974,6 +1024,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('cloudCancelBtn').onclick=hideLogin;
   document.getElementById('cloudLogout').onclick=()=>logout().catch(e=>msg(e.message||String(e)));
   document.getElementById('cloudProduct').onchange=loadEditor;
+  document.getElementById('cloudNewProduct').onclick=startNewProduct;
+  document.getElementById('cloudCancelNewProduct').onclick=cancelNewProduct;
   document.getElementById('cloudService').onchange=loadServiceImages;
   document.getElementById('cloudSaveProduct').onclick=()=>saveProduct().catch(e=>msg('บันทึกไม่สำเร็จ: '+(e.message||e)));
   document.getElementById('cloudSaveService').onclick=()=>saveService().catch(e=>msg('บันทึกไม่สำเร็จ: '+(e.message||e)));
