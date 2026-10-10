@@ -674,7 +674,7 @@ async function renderProducts(){
     card.querySelector(".detail-btn").addEventListener("click",()=>openProductDetail(i));
     card.querySelector(".price-btn").addEventListener("click",(e)=>{
       e.stopPropagation();
-      alert("กรุณาติดต่อ K-Roof เพื่อสอบถามราคา");
+      window.open("https://lin.ee/ONjTmCS", "_blank", "noopener,noreferrer");
     });
     grid.appendChild(card);
   }
@@ -855,7 +855,7 @@ function renderCloudProducts(){
     card.innerHTML='<div class="pic product-card-click">'+(imgs[0]?'<img src="'+imgs[0].url+'" alt="">':'<div class="placeholder">ยังไม่มีรูป<br><b>เพิ่มได้ภายหลัง</b></div>')+'</div><div class="card-body"><span class="tag"></span><h3></h3><div class="card-actions"><button class="price-btn" type="button">สอบถามราคา</button><button class="detail-btn" type="button">รายละเอียด</button></div></div>';
     card.querySelector(".tag").textContent=p.category||p.tag||"K-Roof";card.querySelector("h3").textContent=p.name||"สินค้า";
     card.querySelector(".pic").onclick=()=>cloudDetail(p.id);card.querySelector(".detail-btn").onclick=()=>cloudDetail(p.id);
-    card.querySelector(".price-btn").onclick=e=>{e.stopPropagation();alert("กรุณาติดต่อ K-Roof เพื่อสอบถามราคา");};grid.appendChild(card);
+    card.querySelector(".price-btn").onclick=e=>{e.stopPropagation();window.open("https://lin.ee/ONjTmCS", "_blank", "noopener,noreferrer");};grid.appendChild(card);
   });
 }
 async function cloudDetail(id){
