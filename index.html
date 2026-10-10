@@ -959,48 +959,86 @@ async function saveProduct(){
   if(!category){msg("กรุณากรอกหมวดหมู่สินค้า เช่น ไวนิล หรือไฟเบอร์กลาส");return;}
   const specs={"ความกว้าง":document.getElementById("cloudWidth").value.trim(),"ความหนา":document.getElementById("cloudThickness").value.trim(),"ความยาว":document.getElementById("cloudLength").value.trim(),"สี":document.getElementById("cloudColors").value.trim(),"วัสดุ":document.getElementById("cloudMaterial").value.trim(),"ระยะแป":document.getElementById("cloudPurlin").value.trim(),"ความลาดชัน":document.getElementById("cloudSlope").value.trim(),"รายละเอียดเพิ่มเติม":document.getElementById("cloudMore").value.trim()};
   Object.keys(specs).forEach(k=>{if(!specs[k])delete specs[k];});
-  let id;
-  if(isCreatingProduct){
-    const r=await sb.from("products").insert({name,category,specs}).select().single();
-    if(r.error){msg("เพิ่มสินค้าไม่สำเร็จ: "+r.error.message);return;}
-    id=r.data.id;
-  }else{
-    id=document.getElementById("cloudProduct").value;
-    const p=cloudProducts.find(x=>String(x.id)===String(id));
-    if(!p){msg("ไม่พบสินค้าในตาราง products");return;}
-    const r=await sb.from("products").update({name,category,specs,updated_at:new Date().toISOString()}).eq("id",id);
-    if(r.error){msg("บันทึกสินค้าไม่สำเร็จ: "+r.error.message);return;}
+  const files=document.getElementById("cloudProductFiles").files;
+  const saveBtn=document.getElementById("cloudSaveProduct");
+  saveBtn.disabled=true;
+  msg("กำลังบันทึกข้อมูลสินค้า...");
+  try{
+    let id;
+    if(isCreatingProduct){
+      const r=await sb.from("products").insert({name,category,specs}).select().single();
+      if(r.error)throw new Error("เพิ่มข้อมูลสินค้าไม่สำเร็จ: "+r.error.message);
+      id=r.data.id;
+    }else{
+      id=document.getElementById("cloudProduct").value;
+      const p=cloudProducts.find(x=>String(x.id)===String(id));
+      if(!p)throw new Error("ไม่พบสินค้าในตาราง products กรุณารีเฟรชหน้าเว็บ");
+      const r=await sb.from("products").update({name,category,specs,updated_at:new Date().toISOString()}).eq("id",id);
+      if(r.error)throw new Error("บันทึกข้อมูลสินค้าไม่สำเร็จ: "+r.error.message);
+    }
+    if(files.length){
+      msg("บันทึกข้อมูลแล้ว กำลังอัปโหลดรูป "+files.length+" รูป...");
+      const up=await uploadFiles("product",id,files);
+      if(!up.ok)throw new Error("บันทึกข้อมูลสินค้าแล้ว แต่รูปภาพอัปโหลดไม่สำเร็จ: "+up.error);
+    }
+    isCreatingProduct=false;
+    document.getElementById("cloudProduct").disabled=false;
+    document.getElementById("cloudNewProduct").style.display="inline-block";
+    document.getElementById("cloudCancelNewProduct").style.display="none";
+    document.getElementById("cloudProductFiles").value="";
+    await loadCloud();populateEditor();
+    const sel=document.getElementById("cloudProduct");
+    if([...sel.options].some(o=>String(o.value)===String(id)))sel.value=id;
+    loadEditor();
+    msg(rSafeName(name)+" บันทึกเรียบร้อยแล้ว"+(files.length?" พร้อมอัปโหลด "+files.length+" รูป":""));
+  }catch(e){
+    msg("เกิดข้อผิดพลาด: "+(e.message||String(e))+" — กรุณาถ่ายภาพข้อความนี้ส่งให้ผู้ดูแลเว็บ");
+  }finally{
+    saveBtn.disabled=false;
   }
-  const files=document.getElementById("cloudProductFiles").files,up=await uploadFiles("product",id,files);
-  if(!up.ok){msg("บันทึกข้อมูลสินค้าแล้ว แต่รูปบันทึกไม่สำเร็จ: "+up.error);return;}
-  isCreatingProduct=false;
-  document.getElementById("cloudProduct").disabled=false;
-  document.getElementById("cloudNewProduct").style.display="inline-block";
-  document.getElementById("cloudCancelNewProduct").style.display="none";
-  document.getElementById("cloudProductFiles").value="";
-  await loadCloud();populateEditor();
-  const sel=document.getElementById("cloudProduct");if([...sel.options].some(o=>String(o.value)===String(id)))sel.value=id;
-  loadEditor();
-  msg((rSafeName(name))+" บันทึกเรียบร้อยแล้ว"+(files.length?" พร้อมอัปโหลด "+files.length+" รูป":""));
 }
 function rSafeName(name){return "สินค้า “"+name+"”";}
 async function saveService(){
   if(!sb||!adminUser){msg("กรุณาเข้าสู่ระบบผู้ดูแลก่อน");return;}
-  const id=document.getElementById("cloudService").value,files=document.getElementById("cloudServiceFiles").files;
-  if(!id){msg("กรุณาเลือกบริการ");return;}if(!files.length){msg("กรุณาเลือกไฟล์รูปบริการก่อนกดบันทึก");return;}
-  const up=await uploadFiles("service",id,files);if(!up.ok){msg("บันทึกรูปบริการไม่สำเร็จ: "+up.error);return;}
-  await loadCloud();populateEditor();msg("บันทึกรูปบริการเรียบร้อย");
+  const id=document.getElementById("cloudService").value;
+  const files=document.getElementById("cloudServiceFiles").files;
+  if(!id){msg("กรุณาเลือกบริการ");return;}
+  if(!files.length){msg("กรุณาเลือกไฟล์รูปบริการก่อนกดบันทึก");return;}
+  const btn=document.getElementById("cloudSaveService");
+  btn.disabled=true;
+  msg("กำลังอัปโหลดรูปบริการ...");
+  try{
+    if(!cloudServices.some(s=>String(s.id)===String(id))){
+      throw new Error("ไม่พบรายการบริการนี้ในตาราง services ออนไลน์ กรุณาตรวจสอบว่ามีข้อมูลบริการในฐานข้อมูลก่อนเพิ่มรูป");
+    }
+    const up=await uploadFiles("service",id,files);
+    if(!up.ok)throw new Error(up.error||"ระบบไม่สามารถอัปโหลดรูปบริการได้");
+    document.getElementById("cloudServiceFiles").value="";
+    await loadCloud();populateEditor();
+    msg("บันทึกรูปบริการเรียบร้อยแล้ว");
+  }catch(e){
+    msg("เพิ่มรูปบริการไม่สำเร็จ: "+(e.message||String(e))+" — กรุณาถ่ายภาพข้อความนี้ส่งให้ผู้ดูแลเว็บ");
+  }finally{
+    btn.disabled=false;
+  }
 }
 async function uploadFiles(type,id,files){
+  if(!sb) return {ok:false,error:"ยังไม่ได้เชื่อมต่อ Supabase"};
+  if(!id) return {ok:false,error:"ไม่พบรหัสสินค้า/บริการ"};
   if(!files||!files.length)return {ok:true};
   for(const f of Array.from(files)){
-    const safe=f.name.replace(/[^a-zA-Z0-9._-]/g,"_"),path=(type==="product"?"products/":"services/")+id+"/"+Date.now()+"_"+Math.random().toString(36).slice(2)+"_"+safe;
-    const up=await sb.storage.from("kroof").upload(path,f,{upsert:false,contentType:f.type||"image/jpeg"});
-    if(up.error)return {ok:false,error:up.error.message};
-    const table=type==="product"?"product_images":"service_images",field=type==="product"?"product_id":"service_id";
+    const safe=f.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const path=(type==="product"?"products/":"services/")+id+"/"+Date.now()+"_"+Math.random().toString(36).slice(2)+"_"+safe;
+    const uploaded=await sb.storage.from("kroof").upload(path,f,{upsert:false,contentType:f.type||"image/jpeg"});
+    if(uploaded.error)return {ok:false,error:"อัปโหลดไฟล์ "+f.name+" ไม่สำเร็จ: "+uploaded.error.message};
+    const table=type==="product"?"product_images":"service_images";
+    const field=type==="product"?"product_id":"service_id";
     const imageUrl=sb.storage.from("kroof").getPublicUrl(path).data.publicUrl;
-    const ins=await sb.from(table).insert({[field]:id,image_url:imageUrl,sort_order:1});
-    if(ins.error){await sb.storage.from("kroof").remove([path]);return {ok:false,error:ins.error.message};}
+    const saved=await sb.from(table).insert({[field]:id,image_url:imageUrl,sort_order:Date.now()});
+    if(saved.error){
+      await sb.storage.from("kroof").remove([path]);
+      return {ok:false,error:"อัปโหลดไฟล์แล้ว แต่บันทึกรายการรูปใน "+table+" ไม่สำเร็จ: "+saved.error.message};
+    }
   }
   return {ok:true};
 }
