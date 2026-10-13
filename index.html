@@ -514,7 +514,6 @@ header nav button{
 
 <div class="product-page" id="productPage">
   <div class="product-page-head">
-    <button class="product-back" onclick="closeProductPage()">← กลับ</button>
     <div class="product-page-title" id="productPageTitle">สินค้า</div>
   </div>
   <div class="product-page-body">
@@ -546,7 +545,6 @@ header nav button{
 
 <div class="product-detail-page" id="productDetailPage">
   <div class="detail-head">
-    <button class="detail-back" onclick="closeProductDetail()">← กลับ</button>
     <div class="detail-title" id="detailTitle">รายละเอียดสินค้า</div>
   </div>
   <div class="detail-wrap">
@@ -708,6 +706,7 @@ async function openProductDetail(index){
       box.appendChild(d);
     });
   }
+  if(!page.classList.contains("show")) pushDetailHistory();
   page.classList.add("show");
   window.scrollTo(0,0);
 }
@@ -716,6 +715,17 @@ function closeProductDetail(){
   const p=document.getElementById("productDetailPage");
   if(p) p.classList.remove("show");
 }
+function pushDetailHistory(){
+  if(!history.state || history.state.kroofDetail !== true){
+    history.pushState({...(history.state||{}), kroofDetail:true}, "", location.href);
+  }
+}
+window.addEventListener("popstate",()=>{
+  const detail=document.getElementById("productDetailPage");
+  const product=document.getElementById("productPage");
+  if(detail) detail.classList.remove("show");
+  if(product) product.classList.remove("show");
+});
 
 let lightImgs=[], lightIndex=0;
 function openLightbox(imgs,index,title){
@@ -871,7 +881,7 @@ async function cloudDetail(id){
   const imgs=cloudProductImgs[id]||[],box=document.getElementById("detailImages");
   box.innerHTML=imgs.length?imgs.map(x=>'<div class="detail-image"><img src="'+x.url+'" alt=""></div>').join(""):'<div class="detail-empty" style="grid-column:1/-1">ยังไม่มีรูปสินค้า</div>';
   [...box.querySelectorAll(".detail-image")].forEach((el,i)=>el.onclick=()=>openCloudLightbox(imgs.map(x=>x.url),i,p.name));
-  document.getElementById("productDetailPage").classList.add("show");window.scrollTo(0,0);
+  const detailPage=document.getElementById("productDetailPage");if(!detailPage.classList.contains("show"))pushDetailHistory();detailPage.classList.add("show");window.scrollTo(0,0);
 }
 function renderCloudServices(){
   const names={car1:"โรงจอดรถ 1 คัน",car2:"โรงจอดรถ 2 คัน",car3:"โรงจอดรถ 3 คัน",car4:"โรงจอดรถ 4 คัน + รูฟ",awning:"กันสาด",roof:"ทำหลังคา"};
