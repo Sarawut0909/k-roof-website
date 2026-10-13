@@ -1067,7 +1067,57 @@ async function deleteServiceImage(id,path){
 }
 function msg(t){const el=document.getElementById("cloudMsg");if(el)el.textContent=t;}
 function openCloudLightbox(imgs,i,title){window.__cloudImgs=imgs;window.__cloudI=i;const b=document.getElementById('imageLightbox');b.classList.add('show');document.getElementById('lightboxImage').src=imgs[i];document.getElementById('lightboxCaption').textContent=title;}
+let detailHistoryOpen=false;
+const detailPageEl=document.getElementById('productDetailPage');
+const detailObserver=detailPageEl ? new MutationObserver(()=>{
+  if(detailPageEl.classList.contains('show') && !detailHistoryOpen){
+    detailHistoryOpen=true;
+    history.pushState({kroofProductDetail:true},'','#product-detail');
+  }
+}) : null;
+if(detailObserver) detailObserver.observe(detailPageEl,{attributes:true,attributeFilter:['class']});
+window.addEventListener('popstate',()=>{
+  if(detailPageEl && detailPageEl.classList.contains('show')){
+    detailPageEl.classList.remove('show');
+    detailHistoryOpen=false;
+  }
+});
 window.changeGallery=function(d){const a=window.__cloudImgs||[];if(!a.length)return;window.__cloudI=(window.__cloudI+d+a.length)%a.length;document.getElementById('lightboxImage').src=a[window.__cloudI]};window.closeImageLightbox=function(){document.getElementById('imageLightbox').classList.remove('show')};window.openGallery=async function(key,title){const id=key.split(':')[1],imgs=cloudServiceImgs[id]||[];const m=document.getElementById('galleryModal');document.getElementById('galleryTitle').textContent=title;document.getElementById('galleryFolderName').textContent=title;document.getElementById('galleryThumbs').innerHTML=imgs.map((x,i)=>'<img src="'+x.url+'" style="width:100%;border-radius:10px;cursor:pointer" data-i="'+i+'">').join('');document.getElementById('galleryEmpty').style.display=imgs.length?'none':'block';document.getElementById('galleryModal').classList.add('show');document.querySelectorAll('#galleryThumbs img').forEach((im,i)=>im.onclick=()=>openCloudLightbox(imgs.map(x=>x.url),i,title));};window.closeGallery=function(){document.getElementById('galleryModal').classList.remove('show')};window.closeProductPage=function(){document.getElementById('productPage').classList.remove('show')};window.toggleAdmin=toggle;window.saveProductImages=()=>saveProduct();window.saveServiceImages=()=>saveService();
+// Reliable delegated handler for product details, including cards rendered from Supabase.
+// Capture the click before any per-card handlers so each click opens exactly one detail page.
+document.addEventListener('click', async (e)=>{
+  const target=e.target;
+  const trigger=target && target.closest ? target.closest('#productGrid .detail-btn, #productGrid .pic') : null;
+  if(!trigger) return;
+  e.preventDefault();
+  e.stopPropagation();
+  if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+  const card=trigger.closest('.card');
+  const title=(card?.querySelector('h3')?.textContent||'').trim();
+  try{
+    const online=cloudProducts.find(p=>String(p.name||'').trim()===title);
+    if(online){ await cloudDetail(online.id); return; }
+    const idx=products.findIndex(p=>p[1]===title);
+    if(idx>=0 && typeof window.openProductDetail==='function'){
+      await window.openProductDetail(idx);
+      return;
+    }
+    const detail=document.getElementById('productDetailPage');
+    const detailTitle=document.getElementById('detailTitle');
+    const specsBox=document.getElementById('detailSpecs');
+    const imagesBox=document.getElementById('detailImages');
+    if(detail && detailTitle && specsBox && imagesBox){
+      detailTitle.textContent=title||'รายละเอียดสินค้า';
+      specsBox.innerHTML='<div class="detail-empty">ยังไม่มีรายละเอียดสินค้า</div>';
+      imagesBox.innerHTML='<div class="detail-empty" style="grid-column:1/-1">ยังไม่มีรูปสินค้า</div>';
+      detail.classList.add('show'); window.scrollTo(0,0);
+    }
+  }catch(err){
+    console.error('เปิดรายละเอียดสินค้าไม่สำเร็จ',err);
+    alert('เปิดรายละเอียดสินค้าไม่สำเร็จ กรุณารีเฟรชหน้าเว็บแล้วลองอีกครั้ง');
+  }
+}, true);
+
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('cloudLoginBtn').onclick=()=>login().catch(e=>{document.getElementById('cloudLoginMsg').textContent=e.message||String(e);});
   document.getElementById('cloudCancelBtn').onclick=hideLogin;
