@@ -355,6 +355,28 @@ header nav button:hover{
   .card-actions button{width:100%}
 }
 
+/* About K-Roof */
+.about-section{max-width:1200px;margin:0 auto;padding:38px 18px 48px}
+.about-hero{background:linear-gradient(135deg,#082b55,#0b4d8d);color:#fff;padding:30px;border-radius:20px;margin-bottom:20px}
+.about-hero .eyebrow{color:#ffd33d}
+.about-hero h2{color:#fff;margin:8px 0 12px}
+.about-hero p{font-size:17px;line-height:1.8;margin:0;max-width:900px}
+.about-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.about-card{background:#fff;border:1px solid #e0e6ed;border-radius:16px;padding:22px;box-shadow:0 5px 18px rgba(0,0,0,.05)}
+.about-card h3{color:#082b55;margin:0 0 13px;font-size:21px}
+.about-card p,.about-card li{line-height:1.8;color:#405166}
+.about-card ul{padding-left:22px;margin:0}
+.about-registration{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.about-reg-item{background:#f4f7fa;border-radius:10px;padding:12px}
+.about-reg-item span{display:block;font-size:13px;color:#64748b;margin-bottom:4px}
+.about-reg-item strong{color:#082b55;overflow-wrap:anywhere}
+.about-address{grid-column:1/-1}
+.about-mission{margin-top:18px;background:#fff8df;border:1px solid #f1dfa0;border-radius:16px;padding:22px}
+.about-mission h3{margin:0 0 8px;color:#705000}
+.about-mission p{margin:0;line-height:1.8;color:#4b4534}
+@media(max-width:650px){.about-grid,.about-registration{grid-template-columns:1fr}.about-address{grid-column:auto}.about-hero{padding:23px}.about-hero h2{font-size:27px}}
+
+
 
 .card-actions{
   display:flex !important;
@@ -425,7 +447,7 @@ header nav button{
 <header><div class="nav">
 <div class="logo">K-Roof<small>หลังคาเครูฟ • จำหน่ายและรับติดตั้ง</small></div>
 <nav>
-<button onclick="go('home')">หน้าแรก</button><button onclick="go('products')">สินค้า</button><button onclick="go('services')">บริการ</button><button onclick="go('contact')">ติดต่อ</button><button onclick="toggleAdmin()">จัดการรูป</button>
+<button onclick="go('home')">หน้าแรก</button><button onclick="go('products')">สินค้า</button><button onclick="go('services')">บริการ</button><button onclick="go('about')">เกี่ยวกับเรา</button><button onclick="go('contact')">ติดต่อ</button><button onclick="toggleAdmin()">จัดการรูป</button>
 </nav></div></header>
 
 <main id="home">
@@ -464,6 +486,47 @@ header nav button{
 <div class="card" onclick="openGallery('s:awning','กันสาด')"><div class="pic" id="spic-awning"><div class="placeholder">เพิ่มรูปกันสาด<br><b>คลิกเพื่อดูหลายรูป</b></div></div><div class="card-body"><h3>กันสาด</h3><span class="tag">ดูผลงานจริง</span></div></div>
 <div class="card" onclick="openGallery('s:roof','ทำหลังคา')"><div class="pic" id="spic-roof"><div class="placeholder">เพิ่มรูปงานหลังคา<br><b>คลิกเพื่อดูหลายรูป</b></div></div><div class="card-body"><h3>ทำหลังคา</h3><span class="tag">รับติดตั้ง</span></div></div>
 </div></section>
+
+<section class="about-section" id="about">
+  <div class="about-hero">
+    <div class="eyebrow">ABOUT K-ROOF</div>
+    <h2>เกี่ยวกับเรา | K-Roof ร้านหลังคาเครูฟ</h2>
+    <p>K-Roof ร้านจำหน่ายแผ่นหลังคาและให้บริการติดตั้งหลังคาสำหรับบ้านพักอาศัย อาคาร และพื้นที่ใช้งานหลากหลายรูปแบบ เรามุ่งเน้นการให้ข้อมูลสินค้าอย่างชัดเจน พร้อมช่วยแนะนำวัสดุและรูปแบบหลังคาให้เหมาะสมกับการใช้งานและงบประมาณของลูกค้า</p>
+  </div>
+  <div class="about-grid">
+    <div class="about-card">
+      <h3>บริการของเรา</h3>
+      <ul>
+        <li>จำหน่ายแผ่นหลังคาไวนิล เมทัลชีท PU Foam ไฟเบอร์กลาส และโพลีคาร์บอเนต</li>
+        <li>รับติดตั้งหลังคาโรงจอดรถและกันสาด</li>
+        <li>ให้บริการงานโครงสร้างหลังคาและงานต่อเติมตามความต้องการ</li>
+        <li>ให้คำแนะนำเรื่องการเลือกวัสดุ ขนาด และรูปแบบหลังคาให้เหมาะกับหน้างาน</li>
+        <li>ประสานงานและให้ข้อมูลสินค้าเพื่อช่วยลูกค้าวางแผนงบประมาณก่อนตัดสินใจ</li>
+      </ul>
+    </div>
+    <div class="about-card">
+      <h3>ผู้บริหาร</h3>
+      <p><strong>นายศราวุธ เนรจุล</strong><br>และ <strong>นางสาวรุ่งอรุณ เจแสง</strong></p>
+      <p>ทีมงาน K-Roof มุ่งมั่นให้บริการด้วยความใส่ใจ สื่อสารรายละเอียดสินค้าและขอบเขตงานให้ชัดเจน เพื่อให้ลูกค้าสามารถเลือกแนวทางที่เหมาะสมกับบ้านและอาคารของตนเอง</p>
+    </div>
+    <div class="about-card" style="grid-column:1/-1">
+      <h3>ข้อมูลทะเบียนพาณิชย์</h3>
+      <div class="about-registration">
+        <div class="about-reg-item"><span>ชื่อร้านที่ใช้ประกอบพาณิชยกิจ</span><strong>หลังคา เครูฟ</strong></div>
+        <div class="about-reg-item"><span>ชื่อภาษาอังกฤษ</span><strong>K-Roof</strong></div>
+        <div class="about-reg-item"><span>ทะเบียนเลขที่</span><strong>1840800001690</strong></div>
+        <div class="about-reg-item"><span>เลขคำขอจัดตั้งเลขที่</span><strong>1200668000116</strong></div>
+        <div class="about-reg-item"><span>วันที่จดทะเบียน</span><strong>9 ตุลาคม พ.ศ. 2568</strong></div>
+        <div class="about-reg-item"><span>ประเภทพาณิชยกิจ</span><strong>จำหน่ายแผ่นหลังคาทุกชนิด</strong></div>
+        <div class="about-reg-item about-address"><span>ที่ตั้งสำนักงานใหญ่ตามใบทะเบียน</span><strong>เลขที่ 98/12 หมู่ที่ 3 ตำบลบางรักพัฒนา อำเภอบางบัวทอง จังหวัดนนทบุรี 11110</strong></div>
+      </div>
+    </div>
+  </div>
+  <div class="about-mission">
+    <h3>ความมุ่งมั่นของ K-Roof</h3>
+    <p>เราให้ความสำคัญกับการให้ข้อมูลอย่างตรงไปตรงมา การเลือกวัสดุให้เหมาะกับลักษณะงาน และการประสานงานอย่างใส่ใจ ตั้งแต่การสอบถามข้อมูลไปจนถึงการวางแผนติดตั้ง ทั้งนี้ รายละเอียดสินค้า ราคา และขอบเขตงานจะพิจารณาตามรุ่นสินค้าและเงื่อนไขของแต่ละโครงการ</p>
+  </div>
+</section>
 
 <section class="contact" id="contact"><h2>ติดต่อ K-Roof</h2><div class="contact-box">
 <div class="contact-item"><h3>ข้อมูลสินค้า</h3><p><a href="tel:0927968777">092-796-8777 (เค)</a><br><a href="tel:0928728174">092-872-8174 (แก้ว)</a></p></div>
