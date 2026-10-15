@@ -1165,5 +1165,80 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 })();
 </script>
+
+
+<!-- K-Roof: lightweight copy deterrence for images and selected gallery areas.
+     Text selection remains enabled; this is not a substitute for server-side access control. -->
+<style id="kroof-image-protection-style">
+  img {
+    -webkit-user-drag: none;
+    user-drag: none;
+  }
+</style>
+<script id="kroof-image-protection-script">
+(function () {
+  "use strict";
+
+  // Prevent the browser's context menu on images and image-focused gallery areas only.
+  // Normal text and form fields remain selectable and usable.
+  const protectedAreas = [
+    "img",
+    ".pic",
+    ".product-photo",
+    ".detail-image",
+    ".gallery-main",
+    ".gallery-thumbs",
+    ".folder-grid",
+    ".product-gallery",
+    "#galleryThumbs",
+    "#cloudProductImages",
+    "#cloudServiceImages",
+    ".image-lightbox"
+  ].join(",");
+
+  document.addEventListener("contextmenu", function (event) {
+    if (event.target && event.target.closest && event.target.closest(protectedAreas)) {
+      event.preventDefault();
+    }
+  }, true);
+
+  // Prevent dragging displayed images, including images loaded later from Supabase.
+  document.addEventListener("dragstart", function (event) {
+    const target = event.target;
+    if (target && target.closest && target.closest("img")) {
+      event.preventDefault();
+    }
+  }, true);
+
+  function markImagesNonDraggable(root) {
+    const scope = root && root.querySelectorAll ? root : document;
+    scope.querySelectorAll("img").forEach(function (img) {
+      img.setAttribute("draggable", "false");
+    });
+    if (scope.matches && scope.matches("img")) {
+      scope.setAttribute("draggable", "false");
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () {
+      markImagesNonDraggable(document);
+    }, { once: true });
+  } else {
+    markImagesNonDraggable(document);
+  }
+
+  // Newly rendered gallery/admin images are also marked non-draggable.
+  const observer = new MutationObserver(function (records) {
+    records.forEach(function (record) {
+      record.addedNodes.forEach(function (node) {
+        if (node && node.nodeType === 1) markImagesNonDraggable(node);
+      });
+    });
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
+
 </body>
 </html>
