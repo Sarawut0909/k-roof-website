@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#111111"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="K-Roof Calculator V2">
+<link rel="manifest" href="manifest.json"><title>K-Roof Calculator V2</title>
+<style>
+:root{--bg:#f4f1eb;--card:#fff;--ink:#151515;--muted:#746f67;--gold:#c99b3b;--gold2:#e2bf70;--line:#e5dfd4;--soft:#f8f6f1;--danger:#b33a32;--ok:#1d7a4d}
+*{box-sizing:border-box}html{background:#111}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input{font:inherit}button{cursor:pointer}.top{background:linear-gradient(135deg,#0d0d0d,#242424);color:#fff;padding:calc(15px + env(safe-area-inset-top)) 18px 14px;position:sticky;top:0;z-index:20;box-shadow:0 3px 12px #0004}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:43px;height:43px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:19px;letter-spacing:-2px}.logo i{font-style:normal;color:#ffd66d}.brand b{font-size:22px}.brand small{display:block;color:#bbb;margin-top:1px;font-size:12px}
+.tabs{background:#191919;padding:9px 12px;display:flex;gap:7px;overflow-x:auto;position:sticky;top:76px;z-index:19;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tabs button{white-space:nowrap;border:1px solid #555;background:#292929;color:#ddd;border-radius:13px;padding:10px 13px;font-weight:700;font-size:13px}.tabs button.active{background:var(--gold);color:#111;border-color:var(--gold)}
+main{max-width:980px;margin:auto;padding:14px 14px 90px}.panel{display:none}.panel.active{display:block}.hero{background:#111;color:#fff;border-radius:18px;padding:17px;margin-bottom:12px;box-shadow:0 8px 24px #0001}.hero .ey{color:var(--gold2);font-weight:800;font-size:12px;text-transform:uppercase}.hero h1{margin:4px 0 4px;font-size:23px}.hero p{margin:0;color:#c9c9c9;font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;margin-bottom:12px;box-shadow:0 2px 10px #00000008}.title{font-size:17px;font-weight:900;margin-bottom:12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.field label{display:block;color:#5e5a54;font-size:12px;font-weight:700;margin:0 0 6px}.field input{width:100%;height:50px;border:1px solid #cec8bd;border-radius:12px;padding:0 13px;font-size:18px;background:#fff;color:#111;outline:none}.field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px #c99b3b22}.unit{font-size:11px;color:#888;margin-top:4px}
+.results{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.metric{border-radius:15px;padding:13px 14px;border:1px solid;min-height:105px;display:flex;flex-direction:column;justify-content:center}.metric small{font-size:12px;font-weight:800;color:#222}.metric strong{display:block;font-size:26px;margin-top:3px}.metric.fit{background:#e9f2ff;border-color:#2f6aa8;color:#123d68}.metric.fit small,.metric.fit strong{color:#123d68}.metric.qty{background:#dcf6e4;border-color:#56b87a;color:#075d31}.metric.qty small,.metric.qty strong{color:#075d31}.metric.cut{background:#fff0c9;border-color:#e3ad1c;color:#704900}.metric.cut small,.metric.cut strong{color:#704900}.metric.total{background:#ffdede;border-color:#ef7777;color:#8f1616}.metric.total small,.metric.total strong{color:#8f1616}.metric .sub{font-size:11px;margin-top:3px;opacity:.8;font-weight:600}
+.summary{margin-top:10px;background:#111;color:#fff;border-radius:14px;padding:13px;font-size:15px;line-height:1.55}.summary b{color:#f1c768}.actions{display:flex;gap:8px;margin-top:12px}.btn{border:0;border-radius:12px;padding:12px 15px;background:#111;color:#fff;font-weight:800}.btn.gold{background:var(--gold);color:#111}.btn.light{background:#eeeae2;color:#111}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.tbl{width:100%;min-width:670px;border-collapse:collapse;font-size:12px}.tbl th,.tbl td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}.tbl th:first-child,.tbl td:first-child{text-align:left}.tbl th{background:#f2eee7;color:#57524a}.tbl tr:last-child td{border-bottom:0}.recommended{margin-top:10px;padding:12px;border-radius:13px;background:#eef7f1;color:#165d3b;border:1px solid #cfe8d8;font-weight:800}.hint{font-size:12px;line-height:1.55;color:#777}.multi-head{display:grid;grid-template-columns:52px repeat(4,1fr);gap:7px;color:#777;font-size:10px;margin-bottom:5px}.multi-row{display:grid;grid-template-columns:52px repeat(4,1fr);gap:7px;margin-bottom:7px;align-items:center}.multi-row b{font-size:12px}.multi-row input{width:100%;height:44px;border:1px solid #cec8bd;border-radius:10px;padding:0 7px;font-size:15px}.mini-result{font-size:11px;color:#666;padding:3px 0 8px 59px}.install{background:#fff;border:1px dashed #b9b0a2}.install ol{margin:0;padding-left:22px;line-height:1.8;font-size:13px}.foot{text-align:center;color:#8a847a;font-size:11px;padding:8px 10px 35px}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#111;color:#fff;border-radius:999px;padding:11px 17px;opacity:0;pointer-events:none;transition:.25s;z-index:99;font-size:13px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.multi-head,.multi-row{grid-template-columns:45px repeat(4,1fr)}.multi-row input{font-size:13px;padding:0 5px}.mini-result{padding-left:52px}}
+
+/* ===== V2 two-slope roof calculator ===== */
+
+:root{--bg:#f4f1eb;--card:#fff;--ink:#151515;--muted:#746f67;--gold:#c99b3b;--gold2:#e2bf70;--line:#e5dfd4;--soft:#f8f6f1;--red:#b33a32;--blue:#1764c0;--green:#17633e}
+*{box-sizing:border-box}
+html{background:#111}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai",Arial,sans-serif}
+button,input{font:inherit}button{cursor:pointer}
+.top{background:linear-gradient(135deg,#0d0d0d,#242424);color:#fff;padding:18px;position:sticky;top:0;z-index:20;box-shadow:0 3px 12px #0004}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:43px;height:43px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:18px}.logo i{font-style:normal;color:#ffd66d}.brand b{font-size:22px}.brand small{display:block;color:#bbb;font-size:12px}
+main{max-width:1000px;margin:auto;padding:14px 14px 80px}
+.hero{background:#111;color:#fff;border-radius:18px;padding:18px;margin-bottom:12px}.hero .ey{color:var(--gold2);font-weight:800;font-size:12px}.hero h1{margin:4px 0;font-size:24px}.hero p{margin:0;color:#c9c9c9;font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;margin-bottom:12px;box-shadow:0 2px 10px #00000008}.title{font-size:17px;font-weight:900;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.field label{display:block;color:#5e5a54;font-size:12px;font-weight:700;margin-bottom:6px}.field input{width:100%;height:50px;border:1px solid #cec8bd;border-radius:12px;padding:0 13px;font-size:17px;background:#fff;color:#111}.unit{font-size:11px;color:#888;margin-top:4px}
+.choice{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choice button{border:1px solid #cec8bd;background:#fff;border-radius:12px;padding:12px;font-weight:900}.choice button.active{background:var(--gold);border-color:var(--gold)}.choice small{font-weight:500;color:#666}
+.diagram{background:#faf9f6;border:1px solid var(--line);border-radius:16px;padding:10px;margin-bottom:10px}.svgbox{width:100%;max-width:760px;margin:auto}.svgbox svg{width:100%;height:auto;display:block}
+.lengths{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.check{display:flex;align-items:center;gap:6px;background:#f7f4ee;border:1px solid var(--line);border-radius:10px;padding:9px;font-size:13px;font-weight:800}.check input{accent-color:#111}
+.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:12px 15px;background:#111;color:#fff;font-weight:800}.btn.gold{background:var(--gold);color:#111}.btn.light{background:#eeeae2;color:#111}
+.results{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.metric{background:var(--soft);border:1px solid #eee9e0;border-radius:13px;padding:12px}.metric small{color:#777;font-size:11px}.metric strong{display:block;font-size:22px;margin-top:3px}.metric.primary{background:#111;color:#fff;border-color:#111}.metric.primary small{color:#bbb}.metric.primary strong{color:#f4cc70}
+.summary{margin-top:10px;background:#111;color:#fff;border-radius:14px;padding:13px;font-size:14px;line-height:1.6}.summary b{color:#f1c768}
+.sideSummary{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.sidebox{background:#faf9f6;border:1px solid var(--line);border-radius:13px;padding:12px}.sidebox h3{margin:0 0 7px;font-size:16px}.sidebox p{margin:4px 0;font-size:13px}.side1{border-left:5px solid #8c5a2b}.side2{border-left:5px solid #1764c0}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}.tbl{width:100%;min-width:680px;border-collapse:collapse;font-size:12px}.tbl th,.tbl td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}.tbl th:first-child,.tbl td:first-child{text-align:left}.tbl th{background:#f2eee7;color:#57524a}.tbl tr:last-child td{border-bottom:0}
+.good{margin-top:10px;padding:11px;border-radius:12px;background:#eef7f1;color:#165d3b;border:1px solid #cfe8d8;font-weight:800}.warn{margin-top:10px;padding:11px;border-radius:12px;background:#fff2ef;color:#8d3029;border:1px solid #efc7c1;font-weight:800}
+.cutbox{background:#faf9f6;border:1px solid var(--line);border-radius:12px;padding:11px;margin-top:10px;font-size:12px;line-height:1.7}.cutbox b{color:#111}
+.note{font-size:12px;line-height:1.65;color:#777}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.choice{grid-template-columns:1fr}.lengths{grid-template-columns:repeat(2,1fr)}.sideSummary{grid-template-columns:1fr}}
+
+</style></head>
+<body>
+<header class="top"><div class="brand"><div class="logo"><i>K</i>R</div><div><b>K-Roof V2</b><small>Roof Calculator • สำหรับ iPad</small></div></div></header>
+<nav class="tabs" id="tabs"></nav>
+<main id="app"></main><div class="foot">K-Roof • โปรแกรมคำนวณแผ่นหลังคา</div><div class="toast" id="toast"></div>
+<script>
+const products={
+ snow:{name:'VG SnowRoof',sub:'iR-uPVC • หน้ากว้าง 0.262 ม.',width:.262,lengths:[3,3.5,4,4.5,5,5.5,6,6.5],dw:4.5,dl:1.7},
+ winter:{name:'แผ่นวินเทอร์รูฟ',sub:'เหมือน SnowRoof • หน้ากว้าง 1.00 ม.',width:1,lengths:[3,3.5,4,4.5,5,5.5,6,6.5],dw:4.5,dl:1.7},
+ winterplus:{name:'แผ่นวินเทอร์พลัส',sub:'เหมือน SnowRoof • หน้ากว้าง 0.76 ม.',width:.76,lengths:[3,3.5,4,4.5,5,5.5,6,6.5],dw:4.5,dl:1.7},
+ roofy:{name:'RoofyRoof',sub:'ไวนิล • หน้ากว้าง 0.25 ม.',width:.25,lengths:[4,5,6],dw:5,dl:2.7},
+ glacia:{name:'VG Glacia Roof',sub:'หน้ากว้าง 0.334 ม.',width:.334,lengths:[3,3.5,4,4.5,5,5.5,6,6.5,7],dw:6,dl:2.9},
+ jroof:{name:'JROOF / Mini Gold',sub:'แผ่นหน้ากว้าง 1.00 ม.',width:1,lengths:[3,4,5,6,8,9,10,11,12],dw:6,dl:5.8}
+};
+const tabs=[['snow','SnowRoof'],['winter','วินเทอร์รูฟ'],['winterplus','วินเทอร์พลัส'],['roofy','RoofyRoof'],['glacia','VG Glacia'],['jroof','JROOF / MiniGold'],['multi','หลายส่วน'],['roof2','คำนวนสันตะเข้'],['help','วิธีติดตั้ง']];
+const tabsEl=document.getElementById('tabs'),app=document.getElementById('app');
+tabs.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t[1];b.onclick=()=>show(t[0]);if(i===0)b.className='active';tabsEl.appendChild(b)});
+function show(id){document.querySelectorAll('.tabs button').forEach((b,i)=>b.classList.toggle('active',tabs[i][0]===id));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('p-'+id)?.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function num(v){const x=parseFloat(v);return Number.isFinite(x)?x:0}function up(x){return Math.ceil(x)}function fmt(x,d=2){return Number.isFinite(x)?x.toLocaleString('th-TH',{maximumFractionDigits:d}):'-'}
+function buildProduct(key){
+ const p=products[key],el=document.createElement('section');el.id='p-'+key;el.className='panel'+(key==='snow'?' active':'');
+ el.innerHTML=`<div class="hero"><div class="ey">K-ROOF CALCULATOR</div><h1>${p.name}</h1><p>${p.sub}</p></div>
+ <div class="card"><div class="title">⚙️ ข้อมูลหน้างาน</div><div class="grid">
+ <div class="field"><label>ความกว้างโครงหลังคา</label><input id="${key}-w" type="number" inputmode="decimal" step="0.01" value="${p.dw}"><div class="unit">เมตร</div></div>
+ <div class="field"><label>ระยะยื่น / ความยาวลาด</label><input id="${key}-l" type="number" inputmode="decimal" step="0.01" value="${p.dl}"><div class="unit">เมตร</div></div>
+ <div class="field"><label>หน้ากว้างแผ่น</label><input id="${key}-pw" type="number" inputmode="decimal" step="0.001" value="${p.width}"><div class="unit">เมตร</div></div>
+ </div><div class="actions"><button class="btn gold" onclick="calcProduct('${key}')">▣ คำนวณ</button><button class="btn light" onclick="resetProduct('${key}')">⟳ รีเซ็ต</button></div></div>
+ <div class="card"><div class="title">📊 ผลคำนวณ</div>
+ <div class="results">
+ <div class="metric fit"><small>📏 ความยาวแผ่นที่พอดี</small><strong id="${key}-fit">-</strong><div class="sub">ความยาวที่ให้เศษรวมน้อยที่สุด</div></div>
+ <div class="metric qty"><small>▰ ใช้จำนวน</small><strong id="${key}-full">-</strong><div class="sub">จำนวนแผ่นที่ต้องซื้อ</div></div>
+ <div class="metric cut"><small>✂️ ชิ้นที่ได้</small><strong id="${key}-cut">-</strong><div class="sub">จำนวนที่ตัดได้ต่อ 1 แผ่น</div></div>
+ <div class="metric total"><small>▰ ตัดได้/แผ่น</small><strong id="${key}-got">-</strong><div class="sub">รวมชิ้นที่ได้ตามความกว้าง</div></div>
+ </div><div class="summary" id="${key}-summary">-</div></div>
+ <div class="card"><div class="title">📄 วิเคราะห์การตัดและเศษ</div><div class="tablewrap"><table class="tbl"><thead><tr><th>แผ่นมาตรฐาน</th><th>ตัดได้/แผ่น</th><th>ใช้กี่แผ่น</th><th>ชิ้นที่ได้</th><th>เศษ/แผ่น (ม.)</th><th>เศษรวม (ม.)</th></tr></thead><tbody id="${key}-tbody"></tbody></table></div><div id="${key}-recommended" class="recommended">-</div></div>`;
+ app.appendChild(el);['w','l','pw'].forEach(x=>document.getElementById(`${key}-${x}`).addEventListener('input',()=>calcProduct(key)));calcProduct(key)
+}
+function calcProduct(key){
+ const p=products[key],w=num(document.getElementById(key+'-w').value),l=num(document.getElementById(key+'-l').value),pw=num(document.getElementById(key+'-pw').value);
+ if(w<=0||l<=0||pw<=0)return;
+ const pieces=up(w/pw);let best=null;const tb=document.getElementById(key+'-tbody');tb.innerHTML='';
+ p.lengths.forEach(len=>{
+  const cut=len>=l?Math.floor(len/l):0,use=cut?up(pieces/cut):0,got=cut*use,scrap=cut?len-cut*l:0,total=use*scrap;
+  if(cut){const waste=total*1000;if(!best||waste<best.waste||(waste===best.waste&&scrap<best.scrap)||(waste===best.waste&&scrap===best.scrap&&use<best.use))best={len,cut,use,got,scrap,total,waste}}
+  const tr=document.createElement('tr');tr.innerHTML=`<td>${len.toFixed(1)} ม.</td><td>${cut||0}</td><td>${use||0}</td><td>${got||0}</td><td>${cut?fmt(scrap,2):'-'}</td><td>${cut?fmt(total,2):'-'}</td>`;tb.appendChild(tr)
+ });
+ const fit=best?best.len:null,full=best?best.use:null;
+ document.getElementById(key+'-fit').textContent=fit?fmt(fit,1)+' เมตร':'เกิน '+Math.max(...p.lengths)+' ม.';
+ document.getElementById(key+'-full').textContent=full!=null?fmt(full,0)+' แผ่น':'-';
+ document.getElementById(key+'-cut').textContent=best?fmt(best.cut,0)+' ชิ้น/แผ่น':'-';
+ document.getElementById(key+'-got').textContent=best?fmt(best.got,0)+' ชิ้น':'-';
+ const sum=document.getElementById(key+'-summary'),rec=document.getElementById(key+'-recommended');
+ if(!best){sum.innerHTML=`<b>⚠️ ความยาวเกินขนาดมาตรฐาน</b><br>สูงสุด ${Math.max(...p.lengths)} ม. ต้องแบ่งแนวหรือใช้วิธีต่อ`;rec.textContent='ต้องปรับความยาวลาดก่อนคำนวณ';return}
+ sum.innerHTML=`ต้องใช้ <b>${fmt(pieces,0)} ชิ้น/แนว</b> × <b>1 แนว</b> = <b>${fmt(best.use,0)} แผ่น</b> • แผ่นละตัดได้ <b>${fmt(best.cut,0)} ชิ้น</b> • รวม <b>${fmt(best.got,0)} ชิ้น</b> โดยเลือกขนาดที่มีเศษรวมน้อยที่สุด`;
+ rec.innerHTML=`ขนาดที่มีเศษน้อยที่สุด: <b>${best.len.toFixed(1)} ม.</b> → ตัดได้ ${best.cut} ชิ้น/แผ่น | ใช้ ${best.use} แผ่น | เศษ/แผ่น ${fmt(best.scrap,2)} ม. | <b>เศษรวม ${fmt(best.total,2)} ม.</b>`
+}
+function resetProduct(key){const p=products[key];document.getElementById(key+'-w').value=0;document.getElementById(key+'-l').value=0;document.getElementById(key+'-pw').value=p.width;calcProduct(key);toast('รีเซ็ตค่าหน้างานเป็น 0 แล้ว')}
+Object.keys(products).forEach(buildProduct);
+function buildMulti(){const el=document.createElement('section');el.id='p-multi';el.className='panel';el.innerHTML=`<div class="hero"><div class="ey">CUSTOM CUT CALCULATOR</div><h1>คำนวณหลายส่วน</h1><p>ขนาดสินค้าไม่ตายตัว • หน่วยเซนติเมตร • คำนวณชิ้นเต็ม ชิ้นตัด และจำนวนที่ใช้จริง</p></div><div class="card"><div class="title">รายการหน้างาน</div><div class="multi-head"><span>ส่วน</span><span>กว้างโครง</span><span>ยาวโครง</span><span>กว้างสินค้า</span><span>ยาวสินค้า</span></div><div id="multiRows"></div><div class="actions"><button class="btn gold" onclick="addMulti()">+ เพิ่มส่วน</button><button class="btn light" onclick="clearMulti()">ล้างทั้งหมด</button></div></div><div class="card"><div class="title">สรุปรวม</div><div class="results"><div class="metric primary"><small>รวมชิ้นที่ใช้</small><strong id="mtotal">0</strong></div><div class="metric"><small>รวมแผ่นสต๊อก</small><strong id="mstock">0</strong></div><div class="metric"><small>เศษรวม</small><strong id="mscrap">0 ซม.</strong></div><div class="metric"><small>จำนวนส่วน</small><strong id="msections">0</strong></div></div><div class="summary" id="mnotes">กรอกข้อมูลเพื่อคำนวณ</div></div>`;app.appendChild(el);for(let i=0;i<6;i++)addMulti()}
+let mcount=0;function addMulti(){mcount++;const box=document.createElement('div');box.className='multi-block';box.id='mr'+mcount;box.innerHTML=`<div class="multi-row"><b>${mcount}</b><input type="number" inputmode="decimal" placeholder="กว้าง" class="mw"><input type="number" inputmode="decimal" placeholder="ยาว" class="ml"><input type="number" inputmode="decimal" placeholder="กว้างสินค้า" class="mpw"><input type="number" inputmode="decimal" placeholder="ยาวสินค้า" class="mpl"></div><div class="mini-result" id="mres${mcount}">-</div>`;document.getElementById('multiRows').appendChild(box);box.querySelectorAll('input').forEach(x=>x.addEventListener('input',calcMulti))}
+function clearMulti(){document.querySelectorAll('#multiRows input').forEach(x=>x.value='');calcMulti();toast('ล้างข้อมูลแล้ว')}
+function calcMulti(){let total=0,stock=0,scrap=0,sections=0,notes=[];document.querySelectorAll('.multi-block').forEach((r,i)=>{const w=num(r.querySelector('.mw').value),l=num(r.querySelector('.ml').value),pw=num(r.querySelector('.mpw').value),pl=num(r.querySelector('.mpl').value),out=r.querySelector('.mini-result');if(!(w&&l&&pw&&pl)){out.textContent='-';return}sections++;const rows=up(l/pw),full=Math.floor(w/pl),rem=w%pl,cut=rem>0?1:0,used=rows*(full+cut),perCut=rem?Math.floor(pl/rem):0,stockForFull=rows*full,stockForCut=cut?Math.ceil(rows/(perCut||1)):0,st=stockForFull+stockForCut,usedLen=full*pl+rem,sc=st*pl-usedLen*rows;total+=used;stock+=st;scrap+=Math.max(0,sc);out.innerHTML=`${rows} แนว × (${full} ชิ้นเต็ม${cut?' + 1 ชิ้นตัด':''}) = <b>${used} ชิ้น</b> • สต๊อก ${st} ชิ้น • เศษ ${fmt(Math.max(0,sc),0)} ซม.`;notes.push(`ส่วน ${i+1}: ${rows} แนว, ${full} ชิ้นเต็ม/แนว`+(cut?`, ชิ้นตัด ${fmt(rem,1)} ซม.`:''))});document.getElementById('mtotal').textContent=fmt(total,0);document.getElementById('mstock').textContent=fmt(stock,0);document.getElementById('mscrap').textContent=fmt(scrap,0)+' ซม.';document.getElementById('msections').textContent=sections;document.getElementById('mnotes').innerHTML=notes.length?notes.join('<br>'):'กรอกข้อมูลเพื่อคำนวณ'}
+app.insertAdjacentHTML('beforeend', `<section id="p-roof2" class="panel">
+
+<section class="hero">
+  <div class="ey">K-ROOF CALCULATOR V2</div>
+  <h1>คำนวณแผ่นหลังคาแบบแบ่งครึ่งด้วยเส้นทแยงมุม</h1>
+  <p>เลือก A → D หรือ C → B • แผ่นแต่ละแนวคำนวณตามหน้ากว้างจริง • สรุปแยกฝั่ง 1 และฝั่ง 2</p>
+</section>
+
+<div class="card">
+  <div class="title">1. ขนาดโครงหลังคา 4 ด้าน</div>
+  <div class="note" style="margin-bottom:10px">ตัวเลขทุกช่องสามารถพิมพ์และแก้ไขได้โดยตรง แล้วกด “คำนวณ”</div>
+  <div class="grid">
+    <div class="field"><label>A → B</label><input id="ab" type="text" inputmode="decimal" autocomplete="off" value="5"><div class="unit">เมตร</div></div>
+    <div class="field"><label>B → D</label><input id="bd" type="text" inputmode="decimal" autocomplete="off" value="5"><div class="unit">เมตร</div></div>
+    <div class="field"><label>D → C</label><input id="dc" type="text" inputmode="decimal" autocomplete="off" value="5"><div class="unit">เมตร</div></div>
+    <div class="field"><label>C → A</label><input id="ca" type="text" inputmode="decimal" autocomplete="off" value="5"><div class="unit">เมตร</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="title">2. เลือกเส้นทแยงมุมแบ่งหลังคา</div>
+  <div class="choice" id="diagChoice">
+    <button data-diag="AD" class="active">A → D<br><small>ฝั่งบนขวา + ฝั่งล่างซ้าย</small></button>
+    <button data-diag="CB">C → B<br><small>ฝั่งบนซ้าย + ฝั่งล่างขวา</small></button>
+  </div>
+
+  <div class="diagram">
+    <div class="svgbox">
+      <svg viewBox="0 0 760 500">
+        <polygon points="80,55 680,55 680,440 80,440" fill="#fff" stroke="#b33a32" stroke-width="3"/>
+        <line id="diag" x1="80" y1="55" x2="680" y2="440" stroke="#b33a32" stroke-width="4"/>
+        <g id="arrowLayer"></g>
+        <text x="55" y="43" font-size="28" fill="#b33a32">A</text><text x="688" y="43" font-size="28" fill="#b33a32">B</text>
+        <text x="55" y="475" font-size="28" fill="#b33a32">C</text><text x="688" y="475" font-size="28" fill="#b33a32">D</text>
+        <text id="label1" x="470" y="90" font-size="17" fill="#8d3029">ฝั่ง 1</text>
+        <text id="label2" x="180" y="410" font-size="17" fill="#8d3029">ฝั่ง 2</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="title">3. ขนาดแผ่น</div>
+  <div class="field">
+    <label>หน้ากว้างแผ่น</label>
+    <input id="pw" type="text" inputmode="decimal" autocomplete="off" value="1">
+    <div class="unit">เมตร เช่น 1.00 = แผ่นกว้าง 1 เมตร / 0.262 = 26.2 ซม.</div>
+  </div>
+  <div style="margin-top:12px;font-weight:800;font-size:13px">ความยาวแผ่นมาตรฐานที่มี</div>
+  <div class="lengths" id="lengths"></div>
+  <div class="actions">
+    <button class="btn gold" id="calc">คำนวณ</button>
+    <button class="btn light" id="reset">รีเซ็ต</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="title">4. สรุปรวม</div>
+  <div class="results">
+    <div class="metric primary"><small>แผ่นมาตรฐานรวม</small><strong id="total">-</strong></div>
+    <div class="metric"><small>ชิ้นที่ต้องปูทั้งหมด</small><strong id="pieces">-</strong></div>
+  </div>
+  <div class="summary" id="summary">กดคำนวณเพื่อดูผล</div>
+  <div class="sideSummary" id="sideSummary"></div>
+</div>
+
+<div id="out"></div>
+
+<div class="card">
+  <div class="title">วิธีอ่านผล</div>
+  <div class="note">
+    1) “ชิ้นที่ต้องปู” = จำนวนแนวที่เกิดจากหน้ากว้างแผ่นจริง<br>
+    2) ความยาวของแต่ละแนวคำนวณจากจุดที่แนวนั้นตัดกับเส้นทแยงมุม<br>
+    3) ระบบนำชิ้นที่ต้องใช้ไปจัดลงในแผ่นมาตรฐาน 3–7 เมตร และแสดงว่าแต่ละแผ่นตัดชิ้นใดบ้าง<br>
+    4) สรุปรวมแยก <b>ฝั่ง 1</b> และ <b>ฝั่ง 2</b> ว่าใช้แผ่นขนาดใดกี่แผ่น
+  </div>
+</div>
+
+</section>`);
+(function initRoof2V7(){
+
+const STOCK=[3,3.5,4,4.5,5,5.5,6,6.5,7];
+const $=id=>document.getElementById(id);
+const n=v=>{const x=parseFloat(String(v).replace(/,/g,''));return Number.isFinite(x)?x:0};
+const fmt=(x,d=2)=>x.toLocaleString('th-TH',{maximumFractionDigits:d});
+const EPS=1e-9;
+let diagonal='AD';
+
+STOCK.forEach(L=>{
+  const l=document.createElement('label');
+  l.className='check';
+  l.innerHTML=`<input type="checkbox" value="${L}" checked> ${L} ม.`;
+  $('lengths').appendChild(l);
+});
+
+function selected(){return [...document.querySelectorAll('#lengths input:checked')].map(x=>+x.value).sort((a,b)=>a-b)}
+
+function svgEl(name,attrs){
+  const e=document.createElementNS('http://www.w3.org/2000/svg',name);
+  Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));
+  return e;
+}
+function arrow(x1,y1,x2,y2){
+  const g=svgEl('g',{stroke:'#b33a32','stroke-width':'4',fill:'none','stroke-linecap':'round','stroke-linejoin':'round'});
+  const l=svgEl('line',{x1,y1,x2,y2});
+  const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len;
+  const px=-uy,py=ux, size=13;
+  const a1=`${x2-ux*size+px*size*.75},${y2-uy*size+py*size*.75}`;
+  const a2=`${x2-ux*size-px*size*.75},${y2-uy*size-py*size*.75}`;
+  const h=svgEl('polyline',{points:`${a1} ${x2},${y2} ${a2}`});
+  g.append(l,h);return g;
+}
+function drawArrows(){
+  const layer=$('arrowLayer');layer.innerHTML='';
+  const xL=80,xR=680,yT=55,yB=440,W=600,H=385;
+  if(diagonal==='AD'){
+    // Upper-right triangle: vertical arrows stay to the RIGHT of A-D.
+    for(let x=190;x<=620;x+=105){
+      const yDiag=yT+(x-xL)*H/W;
+      const top=yT+35, bottom=Math.max(top+35,yDiag-25);
+      if(bottom>top) layer.appendChild(arrow(x,bottom,x,top));
+    }
+    // Lower-left triangle: horizontal arrows stay BELOW A-D.
+    for(let y=150;y<=400;y+=75){
+      const xDiag=xL+(y-yT)*W/H;
+      const left=xL+35, right=Math.max(left+35,xDiag-25);
+      if(right>left) layer.appendChild(arrow(right,y,left,y));
+    }
+  }else{
+    // Upper-left triangle: horizontal arrows stay ABOVE C-B.
+    for(let y=85;y<=350;y+=70){
+      const xDiag=xL+(yB-y)*W/H;
+      const left=xL+35,right=Math.max(left+35,xDiag-25);
+      if(right>left) layer.appendChild(arrow(right,y,left,y));
+    }
+    // Lower-right triangle: vertical arrows stay to the RIGHT of C-B.
+    for(let x=180;x<=640;x+=105){
+      const yDiag=yB-(x-xL)*H/W;
+      const top=Math.min(yB-35,yDiag+25), bottom=yB-35;
+      if(bottom>top) layer.appendChild(arrow(x,bottom,x,top));
+    }
+  }
+}
+
+function updateDiagram(){
+  const ad=diagonal==='AD';
+  $('diag').setAttribute('x1',ad?'80':'80');
+  $('diag').setAttribute('y1',ad?'55':'440');
+  $('diag').setAttribute('x2',ad?'680':'680');
+  $('diag').setAttribute('y2',ad?'440':'55');
+  drawArrows();
+  if(ad){
+    $('label1').textContent='ฝั่ง 1 • น้ำไหลขึ้น';
+    $('label1').setAttribute('x','470');$('label1').setAttribute('y','90');
+    $('label2').textContent='ฝั่ง 2 • น้ำไหลซ้าย';
+    $('label2').setAttribute('x','180');$('label2').setAttribute('y','410');
+  }else{
+    $('label1').textContent='ฝั่ง 1 • น้ำไหลซ้าย';
+    $('label1').setAttribute('x','180');$('label1').setAttribute('y','90');
+    $('label2').textContent='ฝั่ง 2 • น้ำไหลลง';
+    $('label2').setAttribute('x','500');$('label2').setAttribute('y','410');
+  }
+}
+
+function dimensions(){
+  // For normal rectangular jobs use opposite-side averages.
+  // This keeps the four input fields usable while the diagonal calculation
+  // remains based on the resulting plan dimensions.
+  return {
+    W:(n($('ab').value)+n($('dc').value))/2,
+    H:(n($('bd').value)+n($('ca').value))/2
+  };
+}
+
+function makePieces(W,H,pw){
+  const zone1=[],zone2=[];
+  if(diagonal==='AD'){
+    // Zone 1: upper-right triangle, sheets run vertically.
+    // Each sheet is pw wide; use the maximum required length in that strip.
+    const count1=Math.ceil(W/pw-EPS);
+    for(let i=0;i<count1;i++){
+      const x2=Math.min(W,(i+1)*pw);
+      const len=H*x2/W;
+      if(len>EPS)zone1.push({index:i+1,need:len});
+    }
+    // Zone 2: lower-left triangle, sheets run horizontally.
+    const count2=Math.ceil(H/pw-EPS);
+    for(let i=0;i<count2;i++){
+      const y2=Math.min(H,(i+1)*pw);
+      const len=W*y2/H;
+      if(len>EPS)zone2.push({index:i+1,need:len});
+    }
+  }else{
+    // Zone 1: upper-left triangle, sheets run horizontally.
+    const count1=Math.ceil(H/pw-EPS);
+    for(let i=0;i<count1;i++){
+      const y2=Math.min(H,(i+1)*pw);
+      const len=W*y2/H;
+      if(len>EPS)zone1.push({index:i+1,need:len});
+    }
+    // Zone 2: lower-right triangle, sheets run vertically.
+    const count2=Math.ceil(W/pw-EPS);
+    for(let i=0;i<count2;i++){
+      const x2=Math.min(W,(i+1)*pw);
+      const len=H*x2/W;
+      if(len>EPS)zone2.push({index:i+1,need:len});
+    }
+  }
+  return {zone1,zone2};
+}
+
+function pack(items,stock){
+  // Best-fit decreasing. Keep this deterministic and finite so the iPad
+  // browser cannot get stuck while recalculating on user input.
+  if(!items.length)return {bins:[],count:0,waste:0};
+  const sorted=[...items].sort((a,b)=>b.need-a.need);
+
+  for(const item of sorted){
+    if(item.need>Math.max(...stock)+EPS)return null;
+  }
+
+  // Try all available stock sizes as bins, then choose the result with
+  // the fewest stock sheets and, for ties, the least waste.
+  let best=null;
+
+  for(const preferred of stock){
+    const bins=[];
+    for(const item of sorted){
+      // Best-fit existing bin.
+      let bestBin=null;
+      let bestRemain=Infinity;
+      for(const b of bins){
+        const remain=b.rem-item.need;
+        if(remain>=-EPS && remain<bestRemain){
+          bestRemain=remain;
+          bestBin=b;
+        }
+      }
+
+      if(bestBin){
+        bestBin.items.push(item);
+        bestBin.rem-=item.need;
+      }else{
+        // Prefer the selected candidate stock size only if it fits;
+        // otherwise use the smallest available stock that fits.
+        const candidates=stock.filter(L=>L+EPS>=item.need);
+        if(!candidates.length)return null;
+        let L=candidates.find(x=>x===preferred);
+        if(L==null)L=candidates[0];
+        bins.push({L,rem:L-item.need,items:[item]});
+      }
+    }
+
+    const waste=bins.reduce((s,b)=>s+b.rem,0);
+    const candidate={bins,count:bins.length,waste};
+    if(!best ||
+       candidate.count<best.count ||
+       (candidate.count===best.count && candidate.waste<best.waste-EPS)){
+      best=candidate;
+    }
+  }
+
+  return best;
+}
+function groups(bins){
+  const map=new Map();
+  for(const b of bins){
+    const key=b.L.toFixed(1);
+    if(!map.has(key))map.set(key,{L:b.L,count:0,pieces:0,waste:0,bins:[]});
+    const g=map.get(key);g.count++;g.pieces+=b.items.length;g.waste+=b.rem;g.bins.push(b);
+  }
+  return [...map.values()].sort((a,b)=>a.L-b.L);
+}
+
+function summaryHTML(gs,total){
+  if(!gs.length)return 'ไม่มีรายการ';
+  return gs.map(g=>`${g.L.toFixed(1)} ม. = <b>${g.count} แผ่น</b>`).join('<br>')+
+    `<div style="margin-top:6px">รวม = <b>${total} แผ่น</b></div>`;
+}
+
+function renderZone(title,items,result,sideClass){
+  const box=document.createElement('div');box.className='card';
+  const gs=groups(result.bins);
+  const rows=gs.map(g=>`<tr><td>${g.L.toFixed(1)} ม.</td><td>${g.count}</td><td>${g.pieces}</td><td>${fmt(g.waste,2)} ม.</td></tr>`).join('');
+  const cuts=gs.map(g=>`<b>${g.count} แผ่น × ${g.L.toFixed(1)} ม.</b><br>`+
+    g.bins.map((b,i)=>`แผ่น ${i+1}: ${b.items.map(x=>fmt(x.need,2)+' ม.').join(' + ')} → เหลือ ${fmt(b.rem,2)} ม.`).join('<br>')
+  ).join('<br>');
+  box.innerHTML=`
+    <div style="font-size:18px;font-weight:900">${title}</div>
+    <div class="note">จำนวนแนว ${items.length} แนว • ความยาวแต่ละแนวคำนวณจากเส้นทแยงมุม</div>
+    <div class="tablewrap">
+      <table class="tbl"><thead><tr><th>ขนาดแผ่นมาตรฐาน</th><th>จำนวนแผ่น</th><th>ชิ้นที่ตัดได้</th><th>เศษรวม</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+    </div>
+    <div class="good">ฝั่งนี้ใช้ <b>${result.count} แผ่น</b> • เศษรวม <b>${fmt(result.waste,2)} ม.</b></div>
+    <div class="cutbox">${cuts}</div>`;
+  $('out').appendChild(box);
+  return {groups:gs,count:result.count,waste:result.waste};
+}
+
+let calculating=false;
+function calculate(){
+  if(calculating)return;
+  calculating=true;
+  try{
+  const {W,H}=dimensions();
+  const pw=n($('pw').value), stock=selected();
+  if(W<=0||H<=0||pw<=0||!stock.length){
+    $('summary').innerHTML='<b>กรุณากรอกข้อมูลให้ครบ</b>';return;
+  }
+  const pieces=makePieces(W,H,pw);
+  const all=[...pieces.zone1,...pieces.zone2];
+  if(all.some(x=>x.need>Math.max(...stock)+EPS)){
+    $('summary').innerHTML='<b>มีบางแนวยาวเกินความยาวแผ่นมาตรฐานที่เลือก</b>';
+    $('out').innerHTML='';$('sideSummary').innerHTML='';return;
+  }
+
+  const r1=pack(pieces.zone1,stock),r2=pack(pieces.zone2,stock),allPack=pack(all,stock);
+  if(!r1||!r2||!allPack){
+    $('summary').innerHTML='<b>ไม่สามารถจัดชุดตัดจากความยาวที่เลือกได้</b>';return;
+  }
+
+  $('out').innerHTML='';
+  const a=renderZone(diagonal==='AD'?'ฝั่ง 1 — น้ำไหลขึ้น':'ฝั่ง 1 — น้ำไหลซ้าย',pieces.zone1,r1,'side1');
+  const b=renderZone(diagonal==='AD'?'ฝั่ง 2 — น้ำไหลซ้าย':'ฝั่ง 2 — น้ำไหลลง',pieces.zone2,r2,'side2');
+
+  $('total').textContent=allPack.count;
+  $('pieces').textContent=all.length;
+  $('summary').innerHTML=`ขนาดโครงประมาณ <b>${fmt(W,2)} × ${fmt(H,2)} ม.</b> • เส้นแบ่ง <b>${diagonal==='AD'?'A → D':'C → B'}</b> • หน้ากว้างแผ่น <b>${fmt(pw,2)} ม.</b>`;
+
+  $('sideSummary').innerHTML=`
+    <div class="sidebox side1"><h3>ฝั่ง 1 ใช้ขนาด</h3>${summaryHTML(a.groups,a.count)}</div>
+    <div class="sidebox side2"><h3>ฝั่ง 2 ใช้ขนาด</h3>${summaryHTML(b.groups,b.count)}</div>`;
+  }finally{
+    calculating=false;
+  }
+}
+
+document.querySelectorAll('#diagChoice button').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('#diagChoice button').forEach(x=>x.classList.remove('active'));
+    btn.classList.add('active');
+    diagonal=btn.dataset.diag;
+    updateDiagram();
+    calculate();
+  };
+});
+
+['ab','bd','dc','ca','pw'].forEach(id=>{
+  $(id).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();calculate();}});
+});
+$('calc').onclick=calculate;
+$('reset').onclick=()=>{
+  $('ab').value=0;$('bd').value=0;$('dc').value=0;$('ca').value=0;$('pw').value=0;
+  document.querySelectorAll('#lengths input').forEach(x=>x.checked=true);
+  diagonal='AD';
+  document.querySelectorAll('#diagChoice button').forEach(x=>x.classList.toggle('active',x.dataset.diag==='AD'));
+  updateDiagram();calculate();
+  toast('รีเซ็ตขนาดโครงและหน้ากว้างแผ่นเป็น 0 แล้ว');
+};
+
+updateDiagram();
+calculate();
+
+})();
+
+function buildHelp(){const el=document.createElement('section');el.id='p-help';el.className='panel';el.innerHTML=`<div class="hero"><div class="ey">K-ROOF APP</div><h1>ติดตั้งบน iPad</h1><p>ทำให้เปิดใช้งานเหมือนแอปได้ โดยไม่ต้องติดตั้งจาก App Store</p></div><div class="card install"><div class="title">วิธีเพิ่มไอคอน K-Roof บนหน้าจอ iPad</div><ol><li>เปิดเว็บไซต์ของ K-Roof ผ่าน <b>Safari</b></li><li>กดปุ่ม <b>แชร์</b> ที่แถบด้านบน</li><li>เลือก <b>เพิ่มไปยังหน้าจอโฮม (Add to Home Screen)</b></li><li>กด <b>เพิ่ม (Add)</b></li><li>กลับหน้าจอ iPad จะมีไอคอน <b>K-Roof</b> และกดเปิดได้เหมือนแอป</li></ol></div><div class="card"><div class="title">การคำนวณ</div><div class="hint">รุ่นสินค้า 4 เมนูใช้หลักเดียวกับตาราง Excel ที่ให้มา: ปัดจำนวนชิ้นตามความกว้างขึ้น, เลือกความยาวมาตรฐานที่พอดี, คำนวณจำนวนแนว และวิเคราะห์การตัด/เศษของแต่ละความยาว ส่วน “หลายส่วน” ใช้หน่วยเซนติเมตรและคำนวณขนาดตัดตามแต่ละส่วน</div></div>`;app.appendChild(el)}buildMulti();buildHelp();
+function toast(s){const t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
